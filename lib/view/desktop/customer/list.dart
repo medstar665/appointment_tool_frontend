@@ -33,7 +33,17 @@ class _DesktopListCustomerState extends State<DesktopListCustomer> {
           ),
           const CustomDivider(),
           _CustomerTableHeading(tableWidth: tableWidth),
-          const CustomDivider(),
+          Stack(
+            children: [
+              const Divider(
+                height: 2.5,
+                thickness: 1,
+                color: Colors.black54,
+              ),
+              if (provider.isSearchingAll)
+                const LinearProgressIndicator(minHeight: 2.5)
+            ],
+          ),
           Expanded(
             child: _CustomerTableData(
               provider: provider,
@@ -123,18 +133,6 @@ class _CustomerTableData extends StatelessWidget {
         itemCount: provider.customers.length,
         itemBuilder: (context, index) {
           final customer = provider.customers[index];
-          if (index == 0) {
-            return Stack(
-              children: [
-                _CustomerListItem(
-                    customer: customer,
-                    tableWidth: tableWidth,
-                    goToPage: goToPage),
-                if (provider.isSearchingAll)
-                  const LinearProgressIndicator(minHeight: 2.5),
-              ],
-            );
-          }
           return _CustomerListItem(
               customer: customer, tableWidth: tableWidth, goToPage: goToPage);
         });

@@ -33,7 +33,17 @@ class _DesktopListApointmentState extends State<DesktopListApointment> {
           ),
           const CustomDivider(),
           _AppointmentTableHeading(tableWidth: tableWidth),
-          const CustomDivider(),
+          Stack(
+            children: [
+              const Divider(
+                height: 2.5,
+                thickness: 1,
+                color: Colors.black54,
+              ),
+              if (provider.isSearchingAll)
+                const LinearProgressIndicator(minHeight: 2.5),
+            ],
+          ),
           Expanded(
             child: _AppointmentTableData(
               provider: provider,
@@ -147,19 +157,6 @@ class _AppointmentTableData extends StatelessWidget {
         itemCount: provider.appointments.length,
         itemBuilder: (context, index) {
           final appointment = provider.appointments[index];
-          if (index == 0) {
-            return Stack(
-              children: [
-                _AppointmentListItem(
-                  appointment: appointment,
-                  tableWidth: tableWidth,
-                  goToPage: goToPage,
-                ),
-                if (provider.isSearchingAll)
-                  const LinearProgressIndicator(minHeight: 2.5),
-              ],
-            );
-          }
           return _AppointmentListItem(
             appointment: appointment,
             tableWidth: tableWidth,

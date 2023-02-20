@@ -33,7 +33,17 @@ class _DesktopListServicesState extends State<DesktopListServices> {
           ),
           const CustomDivider(),
           _ServiceTableHeading(tableWidth: tableWidth),
-          const CustomDivider(),
+          Stack(
+            children: [
+              const Divider(
+                height: 2.5,
+                thickness: 1,
+                color: Colors.black54,
+              ),
+              if (provider.isSearchingAll)
+                const LinearProgressIndicator(minHeight: 2.5),
+            ],
+          ),
           Expanded(
             child: _ServiceTableData(
               provider: provider,
@@ -123,21 +133,11 @@ class _ServiceTableData extends StatelessWidget {
         itemCount: provider.services.length,
         itemBuilder: (context, index) {
           final service = provider.services[index];
-          if (index == 0) {
-            return Stack(
-              children: [
-                _ServiceListItem(
-                  service: service,
-                  tableWidth: tableWidth,
-                  goToPage: goToPage,
-                ),
-                if (provider.isSearchingAll)
-                  const LinearProgressIndicator(minHeight: 2.5),
-              ],
-            );
-          }
           return _ServiceListItem(
-              service: service, tableWidth: tableWidth, goToPage: goToPage);
+            service: service,
+            tableWidth: tableWidth,
+            goToPage: goToPage,
+          );
         });
   }
 }

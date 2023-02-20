@@ -50,7 +50,7 @@ class _DesktopHomeCustomerState extends State<DesktopHomeCustomer> {
     return ChangeNotifierProvider<CustomerService>(
       create: (context) {
         final service = CustomerService();
-        // service.getAll();
+        service.getAll();
         return service;
       },
       child: Scaffold(
