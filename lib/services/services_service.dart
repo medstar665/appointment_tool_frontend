@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 class ServiceService extends BaseService {
   List<ServiceModel> _services = [];
   bool _isSearchingAll = false;
-  bool _isSaving = false;
+  bool _isAdding = false;
+  bool _isUpdating = false;
+  ServiceModel _viewService = ServiceModel();
 
   @override
   Future get({required int id}) async {
@@ -57,8 +59,8 @@ class ServiceService extends BaseService {
     return [];
   }
 
-  Future<String?> save(ServiceModel model) async {
-    _isSaving = true;
+  Future<String?> add(ServiceModel model) async {
+    _isAdding = true;
     notifyListeners();
     final url = Uri.http(Constants.baseApiUrl, '/facility');
     http.Response resp = await http.post(url,
@@ -67,13 +69,33 @@ class ServiceService extends BaseService {
     if (resp.statusCode != 200) {
       error = resp.body;
     }
-    _isSaving = false;
+    _isAdding = false;
     notifyListeners();
     return error;
   }
 
-  List<ServiceModel> get services => List.unmodifiable(_services);
+  Future<String?> update(ServiceModel model) async {
+    _isUpdating = true;
+    notifyListeners();
+    final url = Uri.http(Constants.baseApiUrl, '/facility');
+    http.Response resp = await http.put(url,
+        body: jsonEncode(model.toJson()), headers: Constants.requestHeader);
+    String? error;
+    if (resp.statusCode != 200) {
+      error = resp.body;
+    }
+    _isUpdating = false;
+    notifyListeners();
+    return error;
+  }
 
+  void setViewService(ServiceModel service) {
+    _viewService = service;
+  }
+
+  List<ServiceModel> get services => List.unmodifiable(_services);
   bool get isSearchingAll => _isSearchingAll;
-  bool get isSaving => _isSaving;
+  bool get isAdding => _isAdding;
+  bool get isUpdating => _isUpdating;
+  ServiceModel get viewService => _viewService;
 }

@@ -4,12 +4,16 @@ import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/hnavbar.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:medstar_appointment/view/desktop/customer/add.dart';
+import 'package:medstar_appointment/view/desktop/customer/edit.dart';
 import 'package:medstar_appointment/view/desktop/customer/list.dart';
+import 'package:medstar_appointment/view/desktop/customer/view.dart';
 import 'package:provider/provider.dart';
 
 class DesktopCustomerPageConstants {
   static const listPage = 0;
-  static const addPage = 1;
+  static const viewPage = 1;
+  static const addPage = 2;
+  static const editPage = 3;
 }
 
 class DesktopHomeCustomer extends StatefulWidget {
@@ -35,8 +39,9 @@ class _DesktopHomeCustomerState extends State<DesktopHomeCustomer> {
   }
 
   void goToPage(int toPage) {
-    _pageController.animateToPage(toPage,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    _pageController.jumpToPage(toPage);
+    // _pageController.animateToPage(toPage,
+    //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   @override
@@ -45,7 +50,7 @@ class _DesktopHomeCustomerState extends State<DesktopHomeCustomer> {
     return ChangeNotifierProvider<CustomerService>(
       create: (context) {
         final service = CustomerService();
-        service.getAll();
+        // service.getAll();
         return service;
       },
       child: Scaffold(
@@ -78,7 +83,9 @@ class _DesktopHomeCustomerState extends State<DesktopHomeCustomer> {
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           DesktopListCustomer(goToPage: goToPage),
+                          DesktopViewCustomer(goToPage: goToPage),
                           DesktopAddCustomer(goToPage: goToPage),
+                          DesktopEditCustomer(goToPage: goToPage),
                         ],
                       ),
                     ),

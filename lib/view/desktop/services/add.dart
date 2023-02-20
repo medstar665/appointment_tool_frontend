@@ -24,6 +24,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
   int? fee;
   TextEditingController colorController = TextEditingController();
   Color pickedColor = Color(0xFF2196F3);
+  Function? colorSetState;
 
   void changeColor(Color pickedColor) {
     this.pickedColor = pickedColor;
@@ -55,7 +56,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                     height: 35,
                     child: Consumer<ServiceService>(builder: (_, provider, __) {
                       return ElevatedButton(
-                        onPressed: provider.isSaving
+                        onPressed: provider.isAdding
                             ? null
                             : () {
                                 widget.goToPage(
@@ -72,7 +73,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
               return Stack(
                 children: [
                   const CustomDivider(),
-                  if (provider.isSaving)
+                  if (provider.isAdding)
                     const LinearProgressIndicator(minHeight: 2.5),
                 ],
               );
@@ -178,55 +179,69 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    child: TextFormField(
-                      controller: colorController,
-                      onTap: () async {
-                        bool? saveColor = await showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Pick a color'),
-                            // content: BlockPicker(
-                            //   pickerColor: pickedColor,
-                            //   onColorChanged: changeColor,
-                            // ),
-                            content: MaterialPicker(
-                              pickerColor: pickedColor,
-                              onColorChanged: changeColor,
+                    child: StatefulBuilder(builder: (context, colorSetState) {
+                      this.colorSetState = colorSetState;
+                      return TextFormField(
+                        controller: colorController,
+                        onTap: () async {
+                          bool? saveColor = await showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Pick a color'),
+                              // content: BlockPicker(
+                              //   pickerColor: pickedColor,
+                              //   onColorChanged: changeColor,
+                              // ),
+                              content: MaterialPicker(
+                                pickerColor: pickedColor,
+                                onColorChanged: changeColor,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Clear'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
                             ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Clear'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
+                          );
+                          if (saveColor == null) {
+                            colorController.clear();
+                            colorSetState(() {});
+                          } else if (saveColor) {
+                            colorController.text = pickedColor.value
+                                .toRadixString(16)
+                                .toUpperCase();
+                            colorSetState(() {});
+                          }
+                        },
+                        readOnly: true,
+                        decoration: Constants.textDecoration.copyWith(
+                          labelText: 'Color',
+                          suffixIcon: Icon(
+                            Icons.square_rounded,
+                            color: colorController.text.isEmpty
+                                ? Colors.transparent
+                                : Color(
+                                    int.parse(colorController.text, radix: 16)),
                           ),
-                        );
-                        if (saveColor == null) {
-                          colorController.clear();
-                        } else if (saveColor) {
-                          colorController.text =
-                              pickedColor.value.toRadixString(16).toUpperCase();
-                        }
-                      },
-                      readOnly: true,
-                      decoration:
-                          Constants.textDecoration.copyWith(labelText: 'Color'),
-                    ),
+                        ),
+                      );
+                    }),
                   ),
                 ),
                 Flexible(child: Container()),
@@ -239,7 +254,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                     height: 40,
                     width: 150,
                     child: ElevatedButton(
-                      onPressed: provider.isSaving
+                      onPressed: provider.isAdding
                           ? null
                           : () async {
                               if (!_formKey.currentState!.validate()) {
@@ -253,7 +268,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                                 fee: fee,
                                 color: colorController.text,
                               );
-                              String? error = await provider.save(customer);
+                              String? error = await provider.add(customer);
                               if (error == null) {
                                 _formKey.currentState!.reset();
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -270,7 +285,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                                 );
                               }
                             },
-                      child: Text(provider.isSaving ? 'Saving...' : 'Submit'),
+                      child: Text(provider.isAdding ? 'Saving...' : 'Submit'),
                     ),
                   ),
                 );

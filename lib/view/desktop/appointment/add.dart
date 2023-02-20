@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -36,24 +38,23 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
   int? duration;
   TextEditingController colorController = TextEditingController();
   Color pickedColor = Color(0xFF2196F3);
+  Function? colorSetState;
 
   void changeColor(Color pickedColor) {
     this.pickedColor = pickedColor;
   }
 
-  void changeToServiceDefaultColor(int serviceColor) {
-    pickedColor = Color(serviceColor);
-  }
-
   Future<bool> _loadCustomersAndServices() async {
     _customers = await CustomerService().getCustomerNames();
     _services = await ServiceService().getAllTitles();
-    if (_customers.isNotEmpty) {
-      selectedCustomer = _customers[0];
+    if (_customers.isEmpty) {
+      _customers.insert(0, CustomerModel());
     }
-    if (_services.isNotEmpty) {
-      selectedService = _services[0];
+    if (_services.isEmpty) {
+      _services.insert(0, ServiceModel());
     }
+    selectedCustomer = _customers[0];
+    selectedService = _services[0];
     return true;
   }
 
@@ -111,7 +112,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                         child: Consumer<AppointmentService>(
                             builder: (_, provider, __) {
                           return ElevatedButton(
-                            onPressed: provider.isSaving
+                            onPressed: provider.isAdding
                                 ? null
                                 : () {
                                     widget.goToPage(
@@ -129,7 +130,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                   return Stack(
                     children: [
                       const CustomDivider(),
-                      if (provider.isSaving)
+                      if (provider.isAdding)
                         const LinearProgressIndicator(minHeight: 2.5),
                     ],
                   );
@@ -145,7 +146,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                             return DropdownButton2<CustomerModel>(
                               isExpanded: true,
                               underline: Container(),
-                              offset: const Offset(0, -3),
+                              offset: const Offset(0, 50),
                               barrierLabel: 'Customer',
                               buttonDecoration: BoxDecoration(
                                 border:
@@ -200,7 +201,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                           builder: (context, dropDownSetState) {
                             return DropdownButton2<ServiceModel>(
                               isExpanded: true,
-                              offset: const Offset(0, -3),
+                              offset: const Offset(0, 50),
                               underline: Container(),
                               buttonDecoration: BoxDecoration(
                                 border:
@@ -223,16 +224,23 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                                 );
                               }).toList(),
                               value: selectedService,
-                              onChanged: (value) => dropDownSetState(() {
-                                selectedService = value!;
-                              }),
+                              onChanged: (value) {
+                                if (selectedService.color ==
+                                    colorController.text) {
+                                  colorController.text =
+                                      value!.color == null ? '' : value.color!;
+                                  colorSetState!(() {});
+                                }
+                                dropDownSetState(() {
+                                  selectedService = value!;
+                                });
+                              },
                               searchController: _serviceSearchController,
                               searchMatchFn: (item, searchValue) {
                                 bool result = (item.value as ServiceModel)
                                         .title!
                                         .contains(searchValue) ||
-                                    (item.value as ServiceModel)
-                                        .description!
+                                    '${(item.value as ServiceModel).description}'
                                         .contains(searchValue);
                                 return result;
                               },
@@ -344,52 +352,66 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          controller: colorController,
-                          onTap: () async {
-                            bool? saveColor = await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Pick a color'),
-                                content: MaterialPicker(
-                                  pickerColor: pickedColor,
-                                  onColorChanged: changeColor,
+                        child:
+                            StatefulBuilder(builder: (context, colorSetState) {
+                          this.colorSetState = colorSetState;
+                          return TextFormField(
+                            controller: colorController,
+                            onTap: () async {
+                              bool? saveColor = await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Pick a color'),
+                                  content: MaterialPicker(
+                                    pickerColor: pickedColor,
+                                    onColorChanged: changeColor,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Clear'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Clear'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
+                              );
+                              if (saveColor == null) {
+                                colorController.clear();
+                                colorSetState(() {});
+                              } else if (saveColor) {
+                                colorController.text = pickedColor.value
+                                    .toRadixString(16)
+                                    .toUpperCase();
+                                colorSetState(() {});
+                              }
+                            },
+                            readOnly: true,
+                            decoration: Constants.textDecoration.copyWith(
+                              labelText: 'Color',
+                              suffixIcon: Icon(
+                                Icons.square_rounded,
+                                color: colorController.text.isEmpty
+                                    ? Colors.transparent
+                                    : Color(int.parse(colorController.text,
+                                        radix: 16)),
                               ),
-                            );
-                            if (saveColor == null) {
-                              colorController.clear();
-                            } else if (saveColor) {
-                              colorController.text = pickedColor.value
-                                  .toRadixString(16)
-                                  .toUpperCase();
-                            }
-                          },
-                          readOnly: true,
-                          decoration: Constants.textDecoration
-                              .copyWith(labelText: 'Color'),
-                        ),
+                            ),
+                          );
+                        }),
                       ),
                     ),
                   ],
@@ -401,7 +423,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                         height: 40,
                         width: 150,
                         child: ElevatedButton(
-                          onPressed: provider.isSaving
+                          onPressed: provider.isAdding
                               ? null
                               : () async {
                                   if (!_formKey.currentState!.validate()) {
@@ -418,7 +440,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                                     color: colorController.text,
                                   );
                                   String? error =
-                                      await provider.save(appointment);
+                                      await provider.add(appointment);
                                   if (error == null) {
                                     _formKey.currentState!.reset();
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -437,7 +459,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                                   }
                                 },
                           child:
-                              Text(provider.isSaving ? 'Saving...' : 'Submit'),
+                              Text(provider.isAdding ? 'Saving...' : 'Submit'),
                         ),
                       ),
                     );

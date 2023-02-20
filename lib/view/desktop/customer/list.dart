@@ -21,8 +21,7 @@ class _DesktopListCustomerState extends State<DesktopListCustomer> {
   Widget build(BuildContext context) {
     final double tableWidth = MediaQuery.of(context).size.width -
         NavbarConstants.navbarWidth -
-        (Constants.cardLeftMargin + Constants.cardRightMargin) -
-        40;
+        (Constants.cardLeftMargin + Constants.cardRightMargin);
     return Consumer<CustomerService>(
       builder: (_, provider, __) => Column(
         children: [
@@ -39,6 +38,7 @@ class _DesktopListCustomerState extends State<DesktopListCustomer> {
             child: _CustomerTableData(
               provider: provider,
               tableWidth: tableWidth,
+              goToPage: widget.goToPage,
             ),
           )
         ],
@@ -107,10 +107,15 @@ class _CustomerTableHeading extends StatelessWidget {
 }
 
 class _CustomerTableData extends StatelessWidget {
-  const _CustomerTableData({required this.provider, required this.tableWidth});
+  const _CustomerTableData({
+    required this.provider,
+    required this.tableWidth,
+    required this.goToPage,
+  });
 
   final CustomerService provider;
   final double tableWidth;
+  final Function goToPage;
 
   @override
   Widget build(BuildContext context) {
@@ -121,24 +126,32 @@ class _CustomerTableData extends StatelessWidget {
           if (index == 0) {
             return Stack(
               children: [
-                _CustomerListItem(customer: customer, tableWidth: tableWidth),
+                _CustomerListItem(
+                    customer: customer,
+                    tableWidth: tableWidth,
+                    goToPage: goToPage),
                 if (provider.isSearchingAll)
                   const LinearProgressIndicator(minHeight: 2.5),
               ],
             );
           }
-          return _CustomerListItem(customer: customer, tableWidth: tableWidth);
+          return _CustomerListItem(
+              customer: customer, tableWidth: tableWidth, goToPage: goToPage);
         });
   }
 }
 
 class _CustomerListItem extends StatefulWidget {
-  const _CustomerListItem(
-      {Key? key, required this.customer, required this.tableWidth})
-      : super(key: key);
+  const _CustomerListItem({
+    Key? key,
+    required this.customer,
+    required this.tableWidth,
+    required this.goToPage,
+  }) : super(key: key);
 
   final CustomerModel customer;
   final double tableWidth;
+  final Function goToPage;
 
   @override
   State<_CustomerListItem> createState() => _CustomerListItemState();
@@ -170,57 +183,65 @@ class _CustomerListItemState extends State<_CustomerListItem> {
         onExit: (event) => itemSetState(() {
           _isHovering = false;
         }),
-        child: Column(
-          children: [
-            Container(
-              color: _isHovering ? Colors.grey.shade200 : Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: boxWidth,
-                    child: Text(
-                        '${widget.customer.firstName} ${widget.customer.lastName}'),
+        child: Consumer<CustomerService>(builder: (_, provider, __) {
+          return GestureDetector(
+            onTap: () {
+              provider.setViewCustomer(widget.customer);
+              widget.goToPage(DesktopCustomerPageConstants.viewPage);
+            },
+            child: Column(
+              children: [
+                Container(
+                  color: _isHovering ? Colors.grey.shade200 : Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        width: boxWidth,
+                        child: Text(
+                            '${widget.customer.firstName} ${widget.customer.lastName}'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        width: boxWidth,
+                        child: Text('${widget.customer.phone}'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        width: boxWidth,
+                        child: Text('${widget.customer.email}'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        width: boxWidth,
+                        child: Text('$years Years'),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        width: boxWidth,
+                        child: Text(
+                          '${widget.customer.note}',
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      // Container(
+                      //   alignment: Alignment.centerLeft,
+                      //   padding: const EdgeInsets.only(left: 5),
+                      //   width: 40,
+                      //   child: const Icon(
+                      //     Icons.remove_red_eye,
+                      //     size: 20,
+                      //   ),
+                      // ),
+                    ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: boxWidth,
-                    child: Text('${widget.customer.phone}'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: boxWidth,
-                    child: Text('${widget.customer.email}'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: boxWidth,
-                    child: Text('$years Years'),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 20),
-                    width: boxWidth,
-                    child: Text(
-                      '${widget.customer.note}',
-                      overflow: TextOverflow.clip,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 5),
-                    width: 40,
-                    child: const Icon(
-                      Icons.remove_red_eye,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const CustomDivider(color: Colors.grey),
+              ],
             ),
-            const CustomDivider(color: Colors.grey),
-          ],
-        ),
+          );
+        }),
       );
     });
   }

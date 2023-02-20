@@ -8,7 +8,9 @@ import 'package:http/http.dart' as http;
 class CustomerService extends BaseService {
   List<CustomerModel> _customers = [];
   bool _isSearchingAll = false;
-  bool _isSaving = false;
+  bool _isAdding = false;
+  bool _isUpdating = false;
+  CustomerModel _viewCustomer = CustomerModel();
 
   @override
   Future get({required int id}) async {
@@ -39,8 +41,8 @@ class CustomerService extends BaseService {
     notifyListeners();
   }
 
-  Future<String?> save(CustomerModel customer) async {
-    _isSaving = true;
+  Future<String?> add(CustomerModel customer) async {
+    _isAdding = true;
     notifyListeners();
     final url = Uri.http(Constants.baseApiUrl, '/customer');
     http.Response resp = await http.post(url,
@@ -49,7 +51,22 @@ class CustomerService extends BaseService {
     if (resp.statusCode != 200) {
       error = resp.body;
     }
-    _isSaving = false;
+    _isAdding = false;
+    notifyListeners();
+    return error;
+  }
+
+  Future<String?> update(CustomerModel customer) async {
+    _isUpdating = true;
+    notifyListeners();
+    final url = Uri.http(Constants.baseApiUrl, '/customer');
+    http.Response resp = await http.put(url,
+        body: jsonEncode(customer.toJson()), headers: Constants.requestHeader);
+    String? error;
+    if (resp.statusCode != 200) {
+      error = resp.body;
+    }
+    _isUpdating = false;
     notifyListeners();
     return error;
   }
@@ -72,7 +89,14 @@ class CustomerService extends BaseService {
     return [];
   }
 
+  void setViewCustomer(CustomerModel customer) {
+    _viewCustomer = customer;
+    notifyListeners();
+  }
+
   List<CustomerModel> get customers => List.unmodifiable(_customers);
   bool get isSearchingAll => _isSearchingAll;
-  bool get isSaving => _isSaving;
+  bool get isAdding => _isAdding;
+  bool get isUpdating => _isUpdating;
+  CustomerModel get viewCustomer => _viewCustomer;
 }

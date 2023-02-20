@@ -6,6 +6,17 @@ class Constants {
   static const MaterialColor primaryColor = Colors.blue;
   static const Color shadowColor = Color.fromARGB(255, 192, 192, 192);
 
+  static InputDecoration disabledTextDecoration = InputDecoration(
+    contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+    disabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: Colors.black38,
+        width: 1,
+      ),
+      borderRadius: BorderRadius.circular(15),
+    ),
+  );
+
   static InputDecoration textDecoration = InputDecoration(
     contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
     enabledBorder: OutlineInputBorder(

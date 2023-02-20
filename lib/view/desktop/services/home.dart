@@ -4,12 +4,16 @@ import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/hnavbar.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:medstar_appointment/view/desktop/services/add.dart';
+import 'package:medstar_appointment/view/desktop/services/edit.dart';
 import 'package:medstar_appointment/view/desktop/services/list.dart';
+import 'package:medstar_appointment/view/desktop/services/view.dart';
 import 'package:provider/provider.dart';
 
 class DesktopServicePageConstants {
   static const int listPage = 0;
-  static const int addPage = 1;
+  static const int viewPage = 1;
+  static const int addPage = 2;
+  static const int editPage = 3;
 }
 
 class DesktopHomeService extends StatefulWidget {
@@ -35,8 +39,9 @@ class _DesktopHomeServiceState extends State<DesktopHomeService> {
   }
 
   void goToPage(int toPage) {
-    _pageController.animateToPage(toPage,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    _pageController.jumpToPage(toPage);
+    // _pageController.animateToPage(toPage,
+    //     duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
   @override
@@ -78,7 +83,9 @@ class _DesktopHomeServiceState extends State<DesktopHomeService> {
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           DesktopListServices(goToPage: goToPage),
+                          DesktopViewService(goToPage: goToPage),
                           DesktopAddService(goToPage: goToPage),
+                          DesktopEditService(goToPage: goToPage),
                         ],
                       ),
                     ),

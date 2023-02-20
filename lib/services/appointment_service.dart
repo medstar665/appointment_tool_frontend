@@ -8,7 +8,10 @@ import 'package:medstar_appointment/utility/constants.dart';
 class AppointmentService extends BaseService {
   List<AppointmentModel> _appointments = [];
   bool _isSearchingAll = false;
-  bool _isSaving = false;
+  bool _isAdding = false;
+  bool _isUpdating = false;
+  AppointmentModel _viewAppointment =
+      AppointmentModel(customerId: 0, serviceId: 0);
 
   @override
   Future get({required int id}) async {
@@ -40,24 +43,44 @@ class AppointmentService extends BaseService {
     notifyListeners();
   }
 
-  Future<String?> save(AppointmentModel model) async {
-    _isSaving = true;
+  Future<String?> add(AppointmentModel model) async {
+    _isAdding = true;
     notifyListeners();
     final url = Uri.http(Constants.baseApiUrl, '/appointment');
-    print(jsonEncode(model.toJson()));
     http.Response resp = await http.post(url,
         body: jsonEncode(model.toJson()), headers: Constants.requestHeader);
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;
     }
-    _isSaving = false;
+    _isAdding = false;
     notifyListeners();
     return error;
   }
 
-  List<AppointmentModel> get appointments => List.unmodifiable(_appointments);
+  Future<String?> update(AppointmentModel model) async {
+    _isUpdating = true;
+    notifyListeners();
+    final url = Uri.http(Constants.baseApiUrl, '/appointment');
+    http.Response resp = await http.put(url,
+        body: jsonEncode(model.toJson()), headers: Constants.requestHeader);
+    String? error;
+    if (resp.statusCode != 200) {
+      error = resp.body;
+    }
+    _isUpdating = false;
+    notifyListeners();
+    return error;
+  }
 
+  void setViewAppointment(AppointmentModel appointment) {
+    _viewAppointment = appointment;
+    notifyListeners();
+  }
+
+  List<AppointmentModel> get appointments => List.unmodifiable(_appointments);
   bool get isSearchingAll => _isSearchingAll;
-  bool get isSaving => _isSaving;
+  bool get isAdding => _isAdding;
+  bool get isUpdating => _isUpdating;
+  AppointmentModel get viewAppointment => _viewAppointment;
 }

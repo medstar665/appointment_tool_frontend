@@ -51,7 +51,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
                     child:
                         Consumer<CustomerService>(builder: (_, provider, __) {
                       return ElevatedButton(
-                        onPressed: provider.isSaving
+                        onPressed: provider.isAdding
                             ? null
                             : () {
                                 widget.goToPage(
@@ -68,7 +68,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
               return Stack(
                 children: [
                   const CustomDivider(),
-                  if (provider.isSaving)
+                  if (provider.isAdding)
                     const LinearProgressIndicator(minHeight: 2.5),
                 ],
               );
@@ -219,7 +219,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
                     height: 40,
                     width: 150,
                     child: ElevatedButton(
-                      onPressed: provider.isSaving
+                      onPressed: provider.isAdding
                           ? null
                           : () async {
                               if (!_formKey.currentState!.validate()) {
@@ -234,7 +234,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
                                 dob: _dobController.text,
                                 note: note,
                               );
-                              String? error = await provider.save(customer);
+                              String? error = await provider.add(customer);
                               if (error == null) {
                                 _formKey.currentState!.reset();
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -252,7 +252,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
                                 );
                               }
                             },
-                      child: Text(provider.isSaving ? 'Saving...' : 'Submit'),
+                      child: Text(provider.isAdding ? 'Saving...' : 'Submit'),
                     ),
                   ),
                 );

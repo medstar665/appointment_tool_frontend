@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/appointment/add.dart';
+import 'package:medstar_appointment/view/desktop/appointment/edit.dart';
 import 'package:medstar_appointment/view/desktop/appointment/list.dart';
+import 'package:medstar_appointment/view/desktop/appointment/view.dart';
 import 'package:medstar_appointment/view/desktop/components/hnavbar.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:provider/provider.dart';
 
 class DesktopAppointmentPageConstants {
   static const listPage = 0;
-  static const addPage = 1;
+  static const viewPage = 1;
+  static const addPage = 2;
+  static const editPage = 3;
 }
 
 class DesktopHomeAppointment extends StatefulWidget {
@@ -35,8 +39,9 @@ class _DesktopHomeAppointmentState extends State<DesktopHomeAppointment> {
   }
 
   void goToPage(int toPage) {
-    _pageController.animateToPage(toPage,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    _pageController.jumpToPage(toPage);
+    // _pageController.animateToPage(toPage,
+    //     duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   @override
@@ -79,7 +84,9 @@ class _DesktopHomeAppointmentState extends State<DesktopHomeAppointment> {
                         physics: const NeverScrollableScrollPhysics(),
                         children: [
                           DesktopListApointment(goToPage: goToPage),
+                          DesktopViewAppointment(goToPage: goToPage),
                           DesktopAddAppointment(goToPage: goToPage),
+                          DesktopEditAppointment(goToPage: goToPage),
                         ],
                       ),
                     ),
