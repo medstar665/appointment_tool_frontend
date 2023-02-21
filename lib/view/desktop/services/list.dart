@@ -45,10 +45,13 @@ class _DesktopListServicesState extends State<DesktopListServices> {
             ],
           ),
           Expanded(
-            child: _ServiceTableData(
-              provider: provider,
-              tableWidth: tableWidth,
-              goToPage: widget.goToPage,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: _ServiceTableData(
+                provider: provider,
+                tableWidth: tableWidth,
+                goToPage: widget.goToPage,
+              ),
             ),
           )
         ],

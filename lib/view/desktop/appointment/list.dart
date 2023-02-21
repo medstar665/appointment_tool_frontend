@@ -45,10 +45,13 @@ class _DesktopListApointmentState extends State<DesktopListApointment> {
             ],
           ),
           Expanded(
-            child: _AppointmentTableData(
-              provider: provider,
-              tableWidth: tableWidth,
-              goToPage: widget.goToPage,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: _AppointmentTableData(
+                provider: provider,
+                tableWidth: tableWidth,
+                goToPage: widget.goToPage,
+              ),
             ),
           )
         ],

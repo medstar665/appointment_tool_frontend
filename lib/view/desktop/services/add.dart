@@ -270,13 +270,15 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                               );
                               String? error = await provider.add(customer);
                               if (error == null) {
-                                _formKey.currentState!.reset();
+                                // _formKey.currentState!.reset();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Service Saved Successfully'),
                                   ),
                                 );
                                 provider.getAll();
+                                widget.goToPage(
+                                    DesktopServicePageConstants.listPage);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
