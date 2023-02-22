@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medstar_appointment/view/desktop/appointment/home.dart';
+import 'package:medstar_appointment/view/desktop/calender/home.dart';
 import 'package:medstar_appointment/view/desktop/customer/home.dart';
 import 'package:medstar_appointment/view/desktop/services/home.dart';
 import 'package:medstar_appointment/utility/constants.dart';
@@ -42,14 +43,18 @@ class _DesktopVNavbarState extends State<DesktopVNavbar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
           Container(
             height: 100,
             color: Constants.primaryColor,
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: 20),
           GestureDetector(
-            onTap: null,
+            onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DesktopHomeCalendar(),
+                )),
             child: NavItem(
               title: 'Calender',
               icon: Icons.calendar_month_outlined,

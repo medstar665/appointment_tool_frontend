@@ -74,20 +74,23 @@ class _DesktopHomeAppointmentState extends State<DesktopHomeAppointment> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: SizedBox(
-                      width: size.width -
-                          (NavbarConstants.navbarWidth) -
-                          (Constants.cardLeftMargin +
-                              Constants.cardRightMargin),
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          DesktopListApointment(goToPage: goToPage),
-                          DesktopViewAppointment(goToPage: goToPage),
-                          DesktopAddAppointment(goToPage: goToPage),
-                          DesktopEditAppointment(goToPage: goToPage),
-                        ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        width: size.width -
+                            (NavbarConstants.navbarWidth) -
+                            (Constants.cardLeftMargin +
+                                Constants.cardRightMargin),
+                        child: PageView(
+                          controller: _pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            DesktopListApointment(goToPage: goToPage),
+                            DesktopViewAppointment(goToPage: goToPage),
+                            DesktopAddAppointment(goToPage: goToPage),
+                            DesktopEditAppointment(goToPage: goToPage),
+                          ],
+                        ),
                       ),
                     ),
                   ),

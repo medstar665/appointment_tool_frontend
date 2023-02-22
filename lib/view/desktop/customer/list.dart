@@ -45,13 +45,10 @@ class _DesktopListCustomerState extends State<DesktopListCustomer> {
             ],
           ),
           Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: _CustomerTableData(
-                provider: provider,
-                tableWidth: tableWidth,
-                goToPage: widget.goToPage,
-              ),
+            child: _CustomerTableData(
+              provider: provider,
+              tableWidth: tableWidth,
+              goToPage: widget.goToPage,
             ),
           )
         ],

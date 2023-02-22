@@ -73,20 +73,23 @@ class _DesktopHomeCustomerState extends State<DesktopHomeCustomer> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: SizedBox(
-                      width: size.width -
-                          (NavbarConstants.navbarWidth) -
-                          (Constants.cardLeftMargin +
-                              Constants.cardRightMargin),
-                      child: PageView(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          DesktopListCustomer(goToPage: goToPage),
-                          DesktopViewCustomer(goToPage: goToPage),
-                          DesktopAddCustomer(goToPage: goToPage),
-                          DesktopEditCustomer(goToPage: goToPage),
-                        ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        width: size.width -
+                            (NavbarConstants.navbarWidth) -
+                            (Constants.cardLeftMargin +
+                                Constants.cardRightMargin),
+                        child: PageView(
+                          controller: _pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            DesktopListCustomer(goToPage: goToPage),
+                            DesktopViewCustomer(goToPage: goToPage),
+                            DesktopAddCustomer(goToPage: goToPage),
+                            DesktopEditCustomer(goToPage: goToPage),
+                          ],
+                        ),
                       ),
                     ),
                   ),
