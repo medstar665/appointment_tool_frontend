@@ -6,6 +6,7 @@ import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/services_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
+import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:medstar_appointment/view/desktop/services/home.dart';
 import 'package:provider/provider.dart';
@@ -155,22 +156,28 @@ class _DesktopEditServiceState extends State<DesktopEditService> {
                     Flexible(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
+                        child: NumberTextField(
                           controller: _durationController,
-                          validator: (String? value) {
-                            if (value != null && value.isNotEmpty) {
-                              int val = int.parse(value);
-                              if (val <= 0) {
-                                return 'Please enter a valid duration';
-                              }
-                            }
-                            return null;
-                          },
-                          decoration: Constants.textDecoration.copyWith(
-                            labelText: 'Duration',
-                            suffix: const Text('minutes'),
-                          ),
+                          labelText: 'Duration',
+                          suffixText: 'minutes',
+                          stepper: Constants.timeSlot,
                         ),
+                        // child: TextFormField(
+                        //   controller: _durationController,
+                        //   validator: (String? value) {
+                        //     if (value != null && value.isNotEmpty) {
+                        //       int val = int.parse(value);
+                        //       if (val <= 0) {
+                        //         return 'Please enter a valid duration';
+                        //       }
+                        //     }
+                        //     return null;
+                        //   },
+                        //   decoration: Constants.textDecoration.copyWith(
+                        //     labelText: 'Duration',
+                        //     suffix: const Text('minutes'),
+                        //   ),
+                        // ),
                       ),
                     ),
                   ],
@@ -231,10 +238,11 @@ class _DesktopEditServiceState extends State<DesktopEditService> {
                               labelText: 'Color',
                               suffixIcon: Icon(
                                 Icons.square_rounded,
-                                color: _colorController.text.isEmpty
-                                    ? Colors.transparent
-                                    : Color(int.parse(_colorController.text,
-                                        radix: 16)),
+                                color: Constants.getHexColor(
+                                    _colorController.text),
+                                //  _colorController.text.isEmpty
+                                // ? Colors.transparent
+                                // : Color(int.parse(_colorController.text, radix: 16)),
                               ),
                             ),
                           );

@@ -54,7 +54,19 @@ class Constants {
   static const double cardTopMargin = 20;
   static const double cardBottomMargin = 20;
 
+  static const int timeSlot = 15; // possible values 15, 20, 30 and 60 only
+
   static const Map<String, String> requestHeader = {
     "Content-Type": "application/json"
   };
+
+  static Color getHexColor(String? color) {
+    if (color == null || color.isEmpty) {
+      return Colors.transparent;
+    }
+    color = color.toUpperCase().replaceAll('#', '');
+    color = 'FF$color';
+    int intColor = int.tryParse(color, radix: 16) ?? 0xFF000000;
+    return Color(intColor);
+  }
 }

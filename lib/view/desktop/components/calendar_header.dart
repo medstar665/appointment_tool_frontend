@@ -48,16 +48,18 @@ class _HeaderContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextButton(
-          onPressed: () => service.gotoToday(),
+          onPressed: service.isFetching ? null : () => service.gotoToday(),
           style: TextButton.styleFrom(
             foregroundColor: Colors.black,
           ),
           child: const Text('Today', style: TextStyle(color: Colors.black)),
         ),
         InkWell(
-          onTap: () {
-            service.gotoPrevious();
-          },
+          onTap: service.isFetching
+              ? null
+              : () {
+                  service.gotoPrevious();
+                },
           child: const Icon(
             Icons.keyboard_arrow_left_rounded,
           ),
@@ -67,9 +69,11 @@ class _HeaderContent extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         InkWell(
-          onTap: () {
-            service.gotoNext();
-          },
+          onTap: service.isFetching
+              ? null
+              : () {
+                  service.gotoNext();
+                },
           child: const Icon(
             Icons.keyboard_arrow_right_rounded,
           ),
@@ -106,38 +110,16 @@ class _DayWeekButton extends StatelessWidget {
           children: [
             Card(
               elevation: 0,
-              color: provider.isWeekView
-                  ? Constants.primaryColor
-                  : Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  service.gotoToday();
-                  provider.changeView(CalendarView.WEEK);
-                },
-                child: Container(
-                  width: 60,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                  child: Text(
-                    'Week',
-                    style: TextStyle(
-                      color: provider.isWeekView ? Colors.white : Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-            Card(
-              elevation: 0,
               color: provider.isDayView
                   ? Constants.primaryColor
                   : Colors.transparent,
               child: InkWell(
-                onTap: () {
-                  service.gotoToday();
-                  provider.changeView(CalendarView.DAY);
-                },
+                onTap: service.isFetching
+                    ? null
+                    : () {
+                        service.gotoToday();
+                        provider.changeView(CalendarView.DAY);
+                      },
                 child: Container(
                   width: 60,
                   padding:
@@ -146,6 +128,32 @@ class _DayWeekButton extends StatelessWidget {
                     'Day',
                     style: TextStyle(
                       color: provider.isDayView ? Colors.white : Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              elevation: 0,
+              color: provider.isWeekView
+                  ? Constants.primaryColor
+                  : Colors.transparent,
+              child: InkWell(
+                onTap: service.isFetching
+                    ? null
+                    : () {
+                        service.gotoToday();
+                        provider.changeView(CalendarView.WEEK);
+                      },
+                child: Container(
+                  width: 60,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                  child: Text(
+                    'Week',
+                    style: TextStyle(
+                      color: provider.isWeekView ? Colors.white : Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),

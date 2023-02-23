@@ -41,10 +41,16 @@ class _DesktopHomeCalendarState extends State<DesktopHomeCalendar> {
     final size = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<CalendarDayService>(
-            create: (context) => CalendarDayService()),
-        ChangeNotifierProvider<CalendarWeekService>(
-            create: (context) => CalendarWeekService()),
+        ChangeNotifierProvider<CalendarDayService>(create: (context) {
+          final service = CalendarDayService();
+          service.updateAppointments();
+          return service;
+        }),
+        ChangeNotifierProvider<CalendarWeekService>(create: (context) {
+          final service = CalendarWeekService();
+          service.updateAppointments();
+          return service;
+        }),
         ChangeNotifierProvider<CalendarViewService>(
             create: (context) => CalendarViewService()),
       ],

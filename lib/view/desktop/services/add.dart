@@ -4,6 +4,7 @@ import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/services_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
+import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:medstar_appointment/view/desktop/services/home.dart';
 import 'package:provider/provider.dart';
@@ -150,26 +151,36 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    child: TextFormField(
-                      validator: (String? value) {
-                        if (value != null && value.isNotEmpty) {
-                          int val = int.parse(value);
-                          if (val <= 0) {
-                            return 'Please enter a valid duration';
-                          }
-                        }
-                        return null;
-                      },
+                    child: NumberTextField(
+                      labelText: 'Duration',
+                      suffixText: 'minutes',
+                      stepper: Constants.timeSlot,
                       onSaved: (newValue) {
                         if (newValue != null && newValue.isNotEmpty) {
                           duration = int.parse(newValue);
                         }
                       },
-                      decoration: Constants.textDecoration.copyWith(
-                        labelText: 'Duration',
-                        suffix: const Text('minutes'),
-                      ),
                     ),
+                    // child: TextFormField(
+                    //   validator: (String? value) {
+                    //     if (value != null && value.isNotEmpty) {
+                    //       int val = int.parse(value);
+                    //       if (val <= 0) {
+                    //         return 'Please enter a valid duration';
+                    //       }
+                    //     }
+                    //     return null;
+                    //   },
+                    //   onSaved: (newValue) {
+                    //     if (newValue != null && newValue.isNotEmpty) {
+                    //       duration = int.parse(newValue);
+                    //     }
+                    //   },
+                    //   decoration: Constants.textDecoration.copyWith(
+                    //     labelText: 'Duration',
+                    //     suffix: const Text('minutes'),
+                    //   ),
+                    // ),
                   ),
                 ),
               ],
@@ -234,10 +245,10 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                           labelText: 'Color',
                           suffixIcon: Icon(
                             Icons.square_rounded,
-                            color: colorController.text.isEmpty
-                                ? Colors.transparent
-                                : Color(
-                                    int.parse(colorController.text, radix: 16)),
+                            color: Constants.getHexColor(colorController.text),
+                            // colorController.text.isEmpty
+                            // ? Colors.transparent
+                            // : Color(int.parse(colorController.text, radix: 16)),
                           ),
                         ),
                       );

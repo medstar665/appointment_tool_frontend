@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medstar_appointment/utility/constants.dart';
-import 'package:medstar_appointment/view/desktop/customer/home.dart';
+import 'package:medstar_appointment/view/desktop/calender/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
           child: child!),
-      home: const DesktopHomeCustomer(),
+      home: const DesktopHomeCalendar(),
     );
   }
 }

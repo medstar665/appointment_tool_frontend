@@ -10,8 +10,10 @@ import 'package:medstar_appointment/services/services_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/appointment/home.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
+import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:provider/provider.dart';
+import 'package:time_picker_widget/time_picker_widget.dart';
 
 class DesktopEditAppointment extends StatefulWidget {
   const DesktopEditAppointment({super.key, required this.goToPage});
@@ -37,7 +39,7 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
   final TextEditingController duration = TextEditingController();
   TextEditingController colorController = TextEditingController();
   Color pickedColor = Color(0xFF2196F3);
-  Function? colorSetState;
+  Function? durationColorSetState;
 
   void changeColor(Color pickedColor) {
     this.pickedColor = pickedColor;
@@ -45,7 +47,7 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
 
   Future<bool> _loadCustomersAndServices() async {
     _customers = await CustomerService().getCustomerNames();
-    _services = await ServiceService().getAllTitles();
+    _services = await ServiceService().getAllServices();
     if (_customers.isEmpty) {
       _customers.insert(0, CustomerModel());
     }
@@ -166,7 +168,6 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                 return DropdownButton2<CustomerModel>(
                                   isExpanded: true,
                                   underline: Container(),
-                                  offset: const Offset(0, 50),
                                   barrierLabel: 'Customer',
                                   buttonDecoration: BoxDecoration(
                                     border: Border.all(
@@ -222,7 +223,6 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                               builder: (context, dropDownSetState) {
                                 return DropdownButton2<ServiceModel>(
                                   isExpanded: true,
-                                  offset: const Offset(0, 50),
                                   underline: Container(),
                                   buttonDecoration: BoxDecoration(
                                     border: Border.all(
@@ -252,14 +252,24 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                           value!.color == null
                                               ? ''
                                               : value.color!;
-                                      colorSetState!(() {});
+                                      durationColorSetState!(() {});
                                     } else if (selectedService.color ==
                                         colorController.text) {
                                       colorController.text =
                                           value!.color == null
                                               ? ''
                                               : value.color!;
-                                      colorSetState!(() {});
+                                      durationColorSetState!(() {});
+                                    }
+                                    if (duration.text.isEmpty) {
+                                      duration.text = value!.duration == null
+                                          ? ''
+                                          : '${value.duration}';
+                                    } else if ('${selectedService.duration}' ==
+                                        duration.text) {
+                                      duration.text = value!.duration == null
+                                          ? ''
+                                          : '${value.duration}';
                                     }
                                     dropDownSetState(() {
                                       selectedService = value!;
@@ -329,18 +339,36 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                 return null;
                               },
                               onTap: () async {
-                                TimeOfDay? time = await showTimePicker(
+                                // TimeOfDay? time = await showTimePicker(
+                                //   context: context,
+                                //   initialTime: TimeOfDay.now(),
+                                //   initialEntryMode:
+                                //       TimePickerEntryMode.dialOnly,
+                                //   onEntryModeChanged: null,
+                                // );
+                                TimeOfDay? time = await showCustomTimePicker(
                                   context: context,
-                                  initialTime: TimeOfDay.now(),
-                                  initialEntryMode:
-                                      TimePickerEntryMode.dialOnly,
-                                  onEntryModeChanged: null,
+                                  initialTime:
+                                      const TimeOfDay(hour: 0, minute: 0),
+                                  selectableTimePredicate: (time) =>
+                                      time!.minute % Constants.timeSlot == 0,
+                                  onFailValidation: (context) =>
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please select a correct time.'),
+                                    ),
+                                  ),
                                 );
                                 if (time != null) {
                                   String hr = time.hour < 10
                                       ? '0${time.hour}'
                                       : '${time.hour}';
-                                  appointmentTime.text = '$hr:${time.minute}';
+                                  String mins = time.minute < 10
+                                      ? '0${time.minute}'
+                                      : '${time.minute}';
+                                  appointmentTime.text = '$hr:$mins';
                                 }
                               },
                               readOnly: true,
@@ -353,36 +381,43 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                            child: TextFormField(
-                              controller: duration,
-                              validator: (String? value) {
-                                if (value != null && value.isNotEmpty) {
-                                  int val = int.parse(value);
-                                  if (val <= 0) {
-                                    return 'Please enter a valid duration';
-                                  }
-                                }
-                                return null;
-                              },
-                              decoration: Constants.textDecoration.copyWith(
+                    StatefulBuilder(builder: (context, durationColorSetState) {
+                      this.durationColorSetState = durationColorSetState;
+                      return Row(
+                        children: [
+                          Flexible(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              child: NumberTextField(
                                 labelText: 'Duration',
-                                suffix: const Text('minutes'),
+                                suffixText: 'minutes',
+                                stepper: Constants.timeSlot,
+                                controller: duration,
                               ),
+                              // child: TextFormField(
+                              //   controller: duration,
+                              //   validator: (String? value) {
+                              //     if (value != null && value.isNotEmpty) {
+                              //       int val = int.parse(value);
+                              //       if (val <= 0) {
+                              //         return 'Please enter a valid duration';
+                              //       }
+                              //     }
+                              //     return null;
+                              //   },
+                              //   decoration: Constants.textDecoration.copyWith(
+                              //     labelText: 'Duration',
+                              //     suffix: const Text('minutes'),
+                              //   ),
+                              // ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                            child: StatefulBuilder(
-                                builder: (context, colorSetState) {
-                              this.colorSetState = colorSetState;
-                              return TextFormField(
+                          Flexible(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              child: TextFormField(
                                 controller: colorController,
                                 onTap: () async {
                                   bool? saveColor = await showDialog(
@@ -418,12 +453,12 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                   );
                                   if (saveColor == null) {
                                     colorController.clear();
-                                    colorSetState(() {});
+                                    durationColorSetState(() {});
                                   } else if (saveColor) {
                                     colorController.text = pickedColor.value
                                         .toRadixString(16)
                                         .toUpperCase();
-                                    colorSetState(() {});
+                                    durationColorSetState(() {});
                                   }
                                 },
                                 readOnly: true,
@@ -431,18 +466,19 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                   labelText: 'Color',
                                   suffixIcon: Icon(
                                     Icons.square_rounded,
-                                    color: colorController.text.isEmpty
-                                        ? Colors.transparent
-                                        : Color(int.parse(colorController.text,
-                                            radix: 16)),
+                                    color: Constants.getHexColor(
+                                        colorController.text),
+                                    // colorController.text.isEmpty
+                                    // ? Colors.transparent
+                                    // : Color(int.parse(colorController.text, radix: 16)),
                                   ),
                                 ),
-                              );
-                            }),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    }),
                     Consumer<AppointmentService>(
                       builder: (_, provider, __) {
                         return Center(

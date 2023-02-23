@@ -73,6 +73,21 @@ class AppointmentService extends BaseService {
     return error;
   }
 
+  Future<List<AppointmentModel>> getAppointmentBetween(
+      DateTime start, DateTime end) async {
+    Uri uri = Uri.http(Constants.baseApiUrl, '/appointments', {
+      'startDate': start.toIso8601String(),
+      'endDate': end.toIso8601String()
+    });
+    http.Response resp = await http.get(uri);
+    if (resp.statusCode == 200) {
+      List respBody = jsonDecode(resp.body) as List;
+      return respBody.map((e) => AppointmentModel.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
   void setViewAppointment(AppointmentModel appointment) {
     _viewAppointment = appointment;
     notifyListeners();

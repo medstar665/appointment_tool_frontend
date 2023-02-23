@@ -41,13 +41,12 @@ class ServiceService extends BaseService {
     notifyListeners();
   }
 
-  Future<List<ServiceModel>> getAllTitles({String? search}) async {
+  Future<List<ServiceModel>> getAllServices({String? search}) async {
     Uri uri;
     if (search != null) {
-      uri = Uri.http(
-          Constants.baseApiUrl, '/facility/titles', {'search': search});
+      uri = Uri.http(Constants.baseApiUrl, '/facilities', {'search': search});
     } else {
-      uri = Uri.http(Constants.baseApiUrl, '/facility/titles');
+      uri = Uri.http(Constants.baseApiUrl, '/facilities');
     }
     http.Response resp = await http.get(uri);
     if (resp.statusCode == 200) {

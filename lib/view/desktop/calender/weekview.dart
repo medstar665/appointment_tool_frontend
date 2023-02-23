@@ -26,8 +26,8 @@ class _DesktopWeekCalendarState extends State<DesktopWeekCalendar> {
 
   void _setTimeSlots() {
     DateTime midNight = DateTime(2023);
-    for (int i = 0; i < 24 * 4 - 1; i++) {
-      midNight = midNight.add(const Duration(minutes: 15));
+    for (int i = 0; i < 24 * (60 / Constants.timeSlot) - 1; i++) {
+      midNight = midNight.add(const Duration(minutes: Constants.timeSlot));
       _timeSlots.add(DateFormat.Hm().format(midNight));
     }
   }
@@ -47,7 +47,13 @@ class _DesktopWeekCalendarState extends State<DesktopWeekCalendar> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: const DesktopCalendarHeader(viewType: CalendarView.WEEK),
           ),
-          const CustomDivider(),
+          Stack(
+            children: [
+              const CustomDivider(),
+              if (provider.isFetching)
+                const LinearProgressIndicator(minHeight: 2),
+            ],
+          ),
           Container(
             height: 54,
             alignment: Alignment.centerRight,
@@ -61,14 +67,12 @@ class _DesktopWeekCalendarState extends State<DesktopWeekCalendar> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(DateFormat.E().format(provider
-                          .firstDateOfWeek()
-                          .add(Duration(days: index)))),
+                      Text(DateFormat.E().format(
+                          provider.firstDayOfWeek.add(Duration(days: index)))),
                       const SizedBox(height: 10),
                       Text(
-                        DateFormat.d().format(provider
-                            .firstDateOfWeek()
-                            .add(Duration(days: index))),
+                        DateFormat.d().format(
+                            provider.firstDayOfWeek.add(Duration(days: index))),
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],

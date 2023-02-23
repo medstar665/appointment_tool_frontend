@@ -175,13 +175,13 @@ class _DesktopViewAppointmentState extends State<DesktopViewAppointment> {
                           enabled: false,
                           decoration: Constants.disabledTextDecoration.copyWith(
                             labelText: 'Color',
-                            suffixIcon: Icon(
-                              Icons.square_rounded,
-                              color: colorController.text.isEmpty
-                                  ? Colors.transparent
-                                  : Color(int.parse(colorController.text,
-                                      radix: 16)),
-                            ),
+                            suffixIcon: Icon(Icons.square_rounded,
+                                color:
+                                    Constants.getHexColor(colorController.text)
+                                // colorController.text.isEmpty
+                                //     ? Colors.transparent
+                                //     : Color(int.parse(colorController.text, radix: 16)),
+                                ),
                           ),
                         ),
                       ),

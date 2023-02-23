@@ -150,13 +150,13 @@ class _DesktopViewServiceState extends State<DesktopViewService> {
                           enabled: false,
                           decoration: Constants.disabledTextDecoration.copyWith(
                             labelText: 'Color',
-                            suffixIcon: Icon(
-                              Icons.square_rounded,
-                              color: _colorController.text.isEmpty
-                                  ? Colors.transparent
-                                  : Color(int.parse(_colorController.text,
-                                      radix: 16)),
-                            ),
+                            suffixIcon: Icon(Icons.square_rounded,
+                                color:
+                                    Constants.getHexColor(_colorController.text)
+                                //  _colorController.text.isEmpty
+                                //     ? Colors.transparent
+                                //     : Color(int.parse(_colorController.text, radix: 16)),
+                                ),
                           ),
                         ),
                       ),

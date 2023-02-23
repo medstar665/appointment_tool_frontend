@@ -216,15 +216,15 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                         width: boxWidth - 100,
                         child: Row(
                           children: [
-                            if (widget.service.color != null)
-                              Container(
-                                width: 50,
-                                height: 17,
-                                decoration: BoxDecoration(
-                                  color: getHexColor(widget.service.color!),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
+                            Container(
+                              width: 50,
+                              height: 17,
+                              decoration: BoxDecoration(
+                                color:
+                                    Constants.getHexColor(widget.service.color),
+                                borderRadius: BorderRadius.circular(10),
                               ),
+                            ),
                           ],
                         ),
                       ),
@@ -247,12 +247,5 @@ class _ServiceListItemState extends State<_ServiceListItem> {
         }),
       );
     });
-  }
-
-  Color getHexColor(String color) {
-    color = color.toUpperCase().replaceAll('#', '');
-    color = 'FF$color';
-    int intColor = int.tryParse(color, radix: 16) ?? 0xFF000000;
-    return Color(intColor);
   }
 }

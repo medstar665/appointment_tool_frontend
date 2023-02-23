@@ -260,16 +260,15 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                           width: 100,
                           child: Row(
                             children: [
-                              if (widget.appointment.color != null)
-                                Container(
-                                  width: 50,
-                                  height: 17,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        getHexColor(widget.appointment.color!),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                              Container(
+                                width: 50,
+                                height: 17,
+                                decoration: BoxDecoration(
+                                  color: Constants.getHexColor(
+                                      widget.appointment.color),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -293,12 +292,5 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
         );
       },
     );
-  }
-
-  Color getHexColor(String color) {
-    color = color.toUpperCase().replaceAll('#', '');
-    color = 'FF$color';
-    int intColor = int.tryParse(color, radix: 16) ?? 0xFF000000;
-    return Color(intColor);
   }
 }
