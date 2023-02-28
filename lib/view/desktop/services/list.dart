@@ -75,7 +75,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Title',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -83,7 +83,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Duration',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -91,7 +91,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Fee',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -99,7 +99,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth + 100,
             child: const Text(
               'Description',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -107,7 +107,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth - 100,
             child: const Text(
               'Color',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
         ],
@@ -190,26 +190,38 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text('${widget.service.title}'),
+                        child: Text(
+                          '${widget.service.title}',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text(widget.service.duration != null
-                            ? '${widget.service.duration} minutes'
-                            : ''),
+                        child: Text(
+                          widget.service.duration != null
+                              ? '${widget.service.duration} minutes'
+                              : '',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text(widget.service.fee != null
-                            ? '\$ ${widget.service.fee}'
-                            : ''),
+                        child: Text(
+                          widget.service.fee != null
+                              ? '\$ ${widget.service.fee}'
+                              : '',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth + 100,
-                        child: Text('${widget.service.description}'),
+                        child: Text(
+                          '${widget.service.description}',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
@@ -218,7 +230,7 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                           children: [
                             Container(
                               width: 50,
-                              height: 17,
+                              height: 24,
                               decoration: BoxDecoration(
                                 color:
                                     Constants.getHexColor(widget.service.color),

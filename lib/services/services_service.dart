@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/base_service.dart';
+import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceService extends BaseService {
+  late final UserManagement userManagement;
   List<ServiceModel> _services = [];
   bool _isSearchingAll = false;
   bool _isAdding = false;
@@ -15,7 +17,7 @@ class ServiceService extends BaseService {
   @override
   Future get({required int id}) async {
     final uri = Uri.http('${Constants.baseApiUrl}/facility/$id');
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       return ServiceModel.fromJson(jsonDecode(resp.body));
     }
@@ -28,11 +30,11 @@ class ServiceService extends BaseService {
     notifyListeners();
     Uri uri;
     if (search != null) {
-      uri = Uri.http(Constants.baseApiUrl, '/facilities', {'search': search});
+      uri = Uri.https(Constants.baseApiUrl, '/facilities', {'search': search});
     } else {
-      uri = Uri.http(Constants.baseApiUrl, '/facilities');
+      uri = Uri.https(Constants.baseApiUrl, '/facilities');
     }
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       List respBody = jsonDecode(resp.body) as List;
       _services = respBody.map((e) => ServiceModel.fromJson(e)).toList();
@@ -44,11 +46,11 @@ class ServiceService extends BaseService {
   Future<List<ServiceModel>> getAllServices({String? search}) async {
     Uri uri;
     if (search != null) {
-      uri = Uri.http(Constants.baseApiUrl, '/facilities', {'search': search});
+      uri = Uri.https(Constants.baseApiUrl, '/facilities', {'search': search});
     } else {
-      uri = Uri.http(Constants.baseApiUrl, '/facilities');
+      uri = Uri.https(Constants.baseApiUrl, '/facilities');
     }
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       List respBody = jsonDecode(resp.body) as List;
       final serviceTitles =
@@ -61,9 +63,9 @@ class ServiceService extends BaseService {
   Future<String?> add(ServiceModel model) async {
     _isAdding = true;
     notifyListeners();
-    final url = Uri.http(Constants.baseApiUrl, '/facility');
+    final url = Uri.https(Constants.baseApiUrl, '/facility');
     http.Response resp = await http.post(url,
-        body: jsonEncode(model.toJson()), headers: Constants.requestHeader);
+        body: jsonEncode(model.toJson()), headers: _getHeader());
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;
@@ -76,9 +78,9 @@ class ServiceService extends BaseService {
   Future<String?> update(ServiceModel model) async {
     _isUpdating = true;
     notifyListeners();
-    final url = Uri.http(Constants.baseApiUrl, '/facility');
+    final url = Uri.https(Constants.baseApiUrl, '/facility');
     http.Response resp = await http.put(url,
-        body: jsonEncode(model.toJson()), headers: Constants.requestHeader);
+        body: jsonEncode(model.toJson()), headers: _getHeader());
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;
@@ -92,7 +94,13 @@ class ServiceService extends BaseService {
     _viewService = service;
   }
 
+  Map<String, String> _getHeader() {
+    return Constants.requestHeader
+      ..addAll({"authorization": UserManagement.token ?? ''});
+  }
+
   List<ServiceModel> get services => List.unmodifiable(_services);
+  @override
   bool get isSearchingAll => _isSearchingAll;
   bool get isAdding => _isAdding;
   bool get isUpdating => _isUpdating;

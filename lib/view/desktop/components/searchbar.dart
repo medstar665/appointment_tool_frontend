@@ -56,8 +56,10 @@ class _DesktopSearchbarState extends State<DesktopSearchbar> {
           ),
           const SizedBox(width: 20),
           IconButton(
-            onPressed: () =>
-                widget.serviceInstance.getAll(search: _searchController.text),
+            onPressed: widget.serviceInstance.isSearchingAll
+                ? null
+                : () => widget.serviceInstance
+                    .getAll(search: _searchController.text),
             icon: const Icon(Icons.refresh),
           ),
           const SizedBox(width: 20),

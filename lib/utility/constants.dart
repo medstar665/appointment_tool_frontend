@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static const String baseApiUrl = 'localhost:8094';
+  // static const String baseApiUrl = 'localhost:8094';
+  static const String baseApiUrl = '3.84.238.63.nip.io';
 
   static const MaterialColor primaryColor = Colors.blue;
   static const Color shadowColor = Color.fromARGB(255, 192, 192, 192);
@@ -56,7 +57,7 @@ class Constants {
 
   static const int timeSlot = 15; // possible values 15, 20, 30 and 60 only
 
-  static const Map<String, String> requestHeader = {
+  static final Map<String, String> requestHeader = {
     "Content-Type": "application/json"
   };
 

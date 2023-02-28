@@ -26,10 +26,10 @@ class _DesktopDayCalendarState extends State<DesktopDayCalendar> {
   }
 
   void _setTimeSlots() {
-    DateTime midNight = DateTime(2023);
-    for (int i = 0; i < 24 * (60 / Constants.timeSlot) - 1; i++) {
-      midNight = midNight.add(const Duration(minutes: Constants.timeSlot));
-      _timeSlots.add('$i|${DateFormat.Hm().format(midNight)}');
+    DateTime from8AM = DateTime(2023, 1, 1, 8);
+    for (int i = 0; i < 11 * (60 / Constants.timeSlot) - 1; i++) {
+      from8AM = from8AM.add(const Duration(minutes: Constants.timeSlot));
+      _timeSlots.add('$i|${DateFormat.Hm().format(from8AM)}');
     }
   }
 
@@ -102,15 +102,17 @@ class _DesktopDayCalendarState extends State<DesktopDayCalendar> {
                                         Row(
                                           children: provider.appointments
                                               .map<Widget>((appoint) {
-                                            final midNight = DateTime(
+                                            final from8AM = DateTime(
                                                 2023,
                                                 appoint
                                                     .appointmentDateTime!.month,
                                                 appoint
-                                                    .appointmentDateTime!.day);
+                                                    .appointmentDateTime!.day,
+                                                8,
+                                                0);
                                             final diff = appoint
                                                 .appointmentDateTime!
-                                                .difference(midNight);
+                                                .difference(from8AM);
                                             int startFrom = diff.inMinutes ~/
                                                 Constants.timeSlot;
                                             int noOfSlot = (appoint.duration ??

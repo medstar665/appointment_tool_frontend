@@ -50,11 +50,13 @@ class _DesktopVNavbarState extends State<DesktopVNavbar> {
           ),
           const SizedBox(height: 20),
           GestureDetector(
-            onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DesktopHomeCalendar(),
-                )),
+            onTap: true
+                ? null
+                : () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DesktopHomeCalendar(),
+                    )),
             child: NavItem(
               title: 'Calender',
               icon: Icons.calendar_month_outlined,

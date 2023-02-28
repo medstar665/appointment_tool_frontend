@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:medstar_appointment/model/appointment.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
+import 'package:medstar_appointment/services/user_management.dart';
 
 enum CalendarView {
   WEEK,
@@ -35,7 +36,7 @@ class CalendarDayService extends CalenderBaseService {
   DateTime _date = DateTime.now();
   bool _isFetching = false;
   List<AppointmentModel> _appointments = [];
-  final AppointmentService _appointmentService = AppointmentService();
+  late final AppointmentService _appointmentService;
 
   @override
   void gotoToday() {
@@ -87,7 +88,7 @@ class CalendarWeekService extends CalenderBaseService {
   late DateTime _lastDayOfWeek;
   List<AppointmentModel> _appointments = [];
   bool _isFetching = false;
-  final AppointmentService _appointmentService = AppointmentService();
+  late final AppointmentService _appointmentService;
 
   CalendarWeekService() {
     _firstDateOfWeek();

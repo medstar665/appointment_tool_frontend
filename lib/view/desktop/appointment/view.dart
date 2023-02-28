@@ -55,140 +55,252 @@ class _DesktopViewAppointmentState extends State<DesktopViewAppointment> {
           key: _formKey,
           child: SizedBox(
             width: cardViewWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 17.5, 20, 17.5),
-                  child: Row(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 17.5, 20, 17.5),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'View Appointment',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const Spacer(),
+                        if (appointment.status == AppointmentStatus.Booked)
+                          SizedBox(
+                            height: 35,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                widget.goToPage(
+                                    DesktopAppointmentPageConstants.editPage);
+                              },
+                              child: const Text('Edit Appointment'),
+                            ),
+                          ),
+                        const SizedBox(width: 20),
+                        SizedBox(
+                          height: 35,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              widget.goToPage(
+                                  DesktopAppointmentPageConstants.listPage);
+                            },
+                            child: const Text('All Appointments'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const CustomDivider(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25, 17.5, 20, 17.5),
+                    child: Text(
+                      'Appointment #$_appointmentId (${appointment.status})',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        'View Appointment',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        height: 35,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            widget.goToPage(
-                                DesktopAppointmentPageConstants.editPage);
-                          },
-                          child: const Text('Edit Appointment'),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            enabled: false,
+                            controller: _customerController,
+                            decoration: Constants.disabledTextDecoration,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        height: 35,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            widget.goToPage(
-                                DesktopAppointmentPageConstants.listPage);
-                          },
-                          child: const Text('All Appointments'),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            enabled: false,
+                            controller: _serviceController,
+                            decoration: Constants.disabledTextDecoration,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                const CustomDivider(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 17.5, 20, 17.5),
-                  child: Text(
-                    'Appointment #$_appointmentId (${appointment.status})',
-                    style: const TextStyle(fontSize: 20),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            enabled: false,
+                            controller: appointmentDate,
+                            decoration: Constants.disabledTextDecoration
+                                .copyWith(labelText: 'Appointment Date'),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            enabled: false,
+                            controller: appointmentTime,
+                            decoration:
+                                Constants.disabledTextDecoration.copyWith(
+                              labelText: 'Appointment Time',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          enabled: false,
-                          controller: _customerController,
-                          decoration: Constants.disabledTextDecoration,
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          enabled: false,
-                          controller: _serviceController,
-                          decoration: Constants.disabledTextDecoration,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          enabled: false,
-                          controller: appointmentDate,
-                          decoration: Constants.disabledTextDecoration
-                              .copyWith(labelText: 'Appointment Date'),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          enabled: false,
-                          controller: appointmentTime,
-                          decoration: Constants.disabledTextDecoration.copyWith(
-                            labelText: 'Appointment Time',
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            controller: duration,
+                            enabled: false,
+                            decoration:
+                                Constants.disabledTextDecoration.copyWith(
+                              labelText: 'Duration',
+                              suffix: const Text('minutes'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          controller: duration,
-                          enabled: false,
-                          decoration: Constants.disabledTextDecoration.copyWith(
-                            labelText: 'Duration',
-                            suffix: const Text('minutes'),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: TextFormField(
+                            controller: colorController,
+                            enabled: false,
+                            decoration:
+                                Constants.disabledTextDecoration.copyWith(
+                              labelText: 'Color',
+                              suffixIcon: Icon(Icons.square_rounded,
+                                  color: Constants.getHexColor(
+                                      colorController.text)
+                                  // colorController.text.isEmpty
+                                  //     ? Colors.transparent
+                                  //     : Color(int.parse(colorController.text, radix: 16)),
+                                  ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        child: TextFormField(
-                          controller: colorController,
-                          enabled: false,
-                          decoration: Constants.disabledTextDecoration.copyWith(
-                            labelText: 'Color',
-                            suffixIcon: Icon(Icons.square_rounded,
-                                color:
-                                    Constants.getHexColor(colorController.text)
-                                // colorController.text.isEmpty
-                                //     ? Colors.transparent
-                                //     : Color(int.parse(colorController.text, radix: 16)),
+                    ],
+                  ),
+                  const Spacer(),
+                  if (appointment.status == 'Booked')
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 35,
+                          width: 200,
+                          child: TextButton(
+                            onPressed: provider.updatingStatus
+                                ? null
+                                : () async {
+                                    await provider.updateStatus(_appointmentId!,
+                                        AppointmentStatus.No_Show);
+                                    widget.goToPage(
+                                        DesktopAppointmentPageConstants
+                                            .listPage);
+                                    await provider.getAll();
+                                  },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.album_outlined,
+                                  color: provider.updatingStatus
+                                      ? Colors.grey
+                                      : Colors.amber,
                                 ),
+                                const SizedBox(width: 3),
+                                const Text('No Show'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 15),
+                        SizedBox(
+                          height: 35,
+                          width: 200,
+                          child: TextButton(
+                            onPressed: provider.updatingStatus
+                                ? null
+                                : () async {
+                                    await provider.updateStatus(_appointmentId!,
+                                        AppointmentStatus.Completed);
+                                    widget.goToPage(
+                                        DesktopAppointmentPageConstants
+                                            .listPage);
+                                    await provider.getAll();
+                                  },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.album_outlined,
+                                  color: provider.updatingStatus
+                                      ? Colors.grey
+                                      : Colors.green,
+                                ),
+                                const SizedBox(width: 3),
+                                const Text('Complete'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        SizedBox(
+                          height: 35,
+                          width: 200,
+                          child: TextButton(
+                            onPressed: provider.updatingStatus
+                                ? null
+                                : () async {
+                                    await provider.updateStatus(_appointmentId!,
+                                        AppointmentStatus.Cancelled);
+                                    widget.goToPage(
+                                        DesktopAppointmentPageConstants
+                                            .listPage);
+                                    await provider.getAll();
+                                  },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.album_outlined,
+                                  color: provider.updatingStatus
+                                      ? Colors.grey
+                                      : Colors.red,
+                                ),
+                                const SizedBox(width: 3),
+                                const Text('Cancel'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

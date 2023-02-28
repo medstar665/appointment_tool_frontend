@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:medstar_appointment/model/customer.dart';
 import 'package:medstar_appointment/services/base_service.dart';
+import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,7 @@ class CustomerService extends BaseService {
   @override
   Future get({required int id}) async {
     final uri = Uri.http('${Constants.baseApiUrl}/customer/$id');
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       return CustomerModel.fromJson(jsonDecode(resp.body));
     }
@@ -28,11 +29,11 @@ class CustomerService extends BaseService {
     notifyListeners();
     Uri uri;
     if (search != null && search.isNotEmpty) {
-      uri = Uri.http(Constants.baseApiUrl, '/customers', {'search': search});
+      uri = Uri.https(Constants.baseApiUrl, '/customers', {'search': search});
     } else {
-      uri = Uri.http(Constants.baseApiUrl, '/customers');
+      uri = Uri.https(Constants.baseApiUrl, '/customers');
     }
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       List respBody = jsonDecode(resp.body) as List;
       _customers = respBody.map((e) => CustomerModel.fromJson(e)).toList();
@@ -44,9 +45,9 @@ class CustomerService extends BaseService {
   Future<String?> add(CustomerModel customer) async {
     _isAdding = true;
     notifyListeners();
-    final url = Uri.http(Constants.baseApiUrl, '/customer');
+    final url = Uri.https(Constants.baseApiUrl, '/customer');
     http.Response resp = await http.post(url,
-        body: jsonEncode(customer.toJson()), headers: Constants.requestHeader);
+        body: jsonEncode(customer.toJson()), headers: _getHeader());
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;
@@ -59,9 +60,9 @@ class CustomerService extends BaseService {
   Future<String?> update(CustomerModel customer) async {
     _isUpdating = true;
     notifyListeners();
-    final url = Uri.http(Constants.baseApiUrl, '/customer');
+    final url = Uri.https(Constants.baseApiUrl, '/customer');
     http.Response resp = await http.put(url,
-        body: jsonEncode(customer.toJson()), headers: Constants.requestHeader);
+        body: jsonEncode(customer.toJson()), headers: _getHeader());
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;
@@ -74,12 +75,12 @@ class CustomerService extends BaseService {
   Future<List<CustomerModel>> getCustomerNames({String? search}) async {
     Uri uri;
     if (search != null && search.isNotEmpty) {
-      uri =
-          Uri.http(Constants.baseApiUrl, '/customer/names', {'search': search});
+      uri = Uri.https(
+          Constants.baseApiUrl, '/customer/names', {'search': search});
     } else {
-      uri = Uri.http(Constants.baseApiUrl, '/customer/names');
+      uri = Uri.https(Constants.baseApiUrl, '/customer/names');
     }
-    http.Response resp = await http.get(uri);
+    http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
       List respBody = jsonDecode(resp.body) as List;
       List<CustomerModel> customernames =
@@ -94,7 +95,13 @@ class CustomerService extends BaseService {
     notifyListeners();
   }
 
+  Map<String, String> _getHeader() {
+    return Constants.requestHeader
+      ..addAll({"authorization": UserManagement.token ?? ''});
+  }
+
   List<CustomerModel> get customers => List.unmodifiable(_customers);
+  @override
   bool get isSearchingAll => _isSearchingAll;
   bool get isAdding => _isAdding;
   bool get isUpdating => _isUpdating;

@@ -75,7 +75,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Full Name',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -83,7 +83,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Phone',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -91,7 +91,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Email',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -99,7 +99,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Age',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -107,7 +107,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Note',
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
             ),
           ),
         ],
@@ -198,28 +198,40 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
                         child: Text(
-                            '${widget.customer.firstName} ${widget.customer.lastName}'),
+                          '${widget.customer.firstName} ${widget.customer.lastName}',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text('${widget.customer.phone}'),
+                        child: Text(
+                          '${widget.customer.phone}',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text('${widget.customer.email}'),
+                        child: Text(
+                          '${widget.customer.email}',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
-                        child: Text('$years Years'),
+                        child: Text(
+                          '$years Years',
+                          style: const TextStyle(fontSize: 17),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         width: boxWidth,
                         child: Text(
                           '${widget.customer.note}',
+                          style: const TextStyle(fontSize: 17),
                           overflow: TextOverflow.clip,
                         ),
                       ),

@@ -7,6 +7,7 @@ import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/services/customer_service.dart';
 import 'package:medstar_appointment/services/services_service.dart';
+import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/appointment/home.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
@@ -286,11 +287,12 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                           },
                           onTap: () async {
                             DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2100),
-                            );
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100),
+                                selectableDayPredicate: (DateTime val) =>
+                                    !(val.weekday == 6 || val.weekday == 7));
                             if (date != null) {
                               appointmentDate.text =
                                   date.toIso8601String().split('T')[0];
@@ -323,9 +325,11 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                             TimeOfDay? time =
                                 await timePicker.showCustomTimePicker(
                               context: context,
-                              initialTime: const TimeOfDay(hour: 0, minute: 0),
-                              selectableTimePredicate: (time) =>
-                                  time!.minute % Constants.timeSlot == 0,
+                              initialTime: const TimeOfDay(hour: 8, minute: 0),
+                              selectableTimePredicate: (time) {
+                                return (time!.hour >= 7 && time.hour <= 19) &&
+                                    time.minute % Constants.timeSlot == 0;
+                              },
                               onFailValidation: (context) =>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -495,6 +499,9 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                                       ),
                                     );
                                     provider.getAll();
+                                    widget.goToPage(
+                                        DesktopAppointmentPageConstants
+                                            .listPage);
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
