@@ -58,8 +58,7 @@ class UserManagement {
   Future<String?> logout() async {
     Uri uri = Uri.https(Constants.baseApiUrl, 'logout');
     http.Response resp = await http.post(uri,
-        headers: Constants.requestHeader
-          ..addAll({"authorization": token ?? ''}));
+        headers: Constants.requestHeader..addAll({"authtoken": token ?? ''}));
     String? error;
     if (resp.statusCode != 200) {
       error = resp.body;

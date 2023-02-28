@@ -136,7 +136,7 @@ class AppointmentService extends BaseService {
 
   Map<String, String> _getHeader() {
     return Constants.requestHeader
-      ..addAll({"authorization": UserManagement.token ?? ''});
+      ..addAll({"authtoken": UserManagement.token ?? ''});
   }
 
   List<AppointmentModel> get appointments => List.unmodifiable(_appointments);

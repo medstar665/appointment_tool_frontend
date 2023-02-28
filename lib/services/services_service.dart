@@ -96,7 +96,7 @@ class ServiceService extends BaseService {
 
   Map<String, String> _getHeader() {
     return Constants.requestHeader
-      ..addAll({"authorization": UserManagement.token ?? ''});
+      ..addAll({"authtoken": UserManagement.token ?? ''});
   }
 
   List<ServiceModel> get services => List.unmodifiable(_services);
