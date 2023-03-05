@@ -7,9 +7,8 @@ import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/services/customer_service.dart';
 import 'package:medstar_appointment/services/services_service.dart';
-import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
-import 'package:medstar_appointment/view/desktop/appointment/home.dart';
+import 'package:medstar_appointment/view/desktop/appointment/base_card.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
 import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
@@ -135,7 +134,7 @@ class _DesktopEditAppointmentState extends State<DesktopEditAppointment> {
                                             DesktopAppointmentPageConstants
                                                 .viewPage);
                                       },
-                                child: const Text('View Appointment'),
+                                child: const Text('Cancel'),
                               );
                             }),
                           ),

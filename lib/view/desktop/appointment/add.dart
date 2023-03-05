@@ -7,9 +7,8 @@ import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/services/customer_service.dart';
 import 'package:medstar_appointment/services/services_service.dart';
-import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
-import 'package:medstar_appointment/view/desktop/appointment/home.dart';
+import 'package:medstar_appointment/view/desktop/appointment/base_card.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
 import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
@@ -57,12 +56,27 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
     }
     selectedCustomer = _customers[0];
     selectedService = _services[0];
+    durationController.text = '${selectedService.duration}';
+    colorController.text = '${selectedService.color}';
+    if (selectedService.color != null && selectedService.color!.isNotEmpty) {
+      pickedColor = Constants.getHexColor(selectedService.color);
+    }
     return true;
   }
 
   @override
   void initState() {
     super.initState();
+  }
+
+  DateTime _getInitialDate() {
+    final today = DateTime.now();
+    if (today.weekday == 6) {
+      return today.add(const Duration(days: 2));
+    } else if (today.weekday == 7) {
+      return today.add(const Duration(days: 1));
+    }
+    return today;
   }
 
   @override
@@ -288,7 +302,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                           onTap: () async {
                             DateTime? date = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
+                                initialDate: _getInitialDate(),
                                 firstDate: DateTime.now(),
                                 lastDate: DateTime(2100),
                                 selectableDayPredicate: (DateTime val) =>

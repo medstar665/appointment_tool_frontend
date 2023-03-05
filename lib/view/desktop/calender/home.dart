@@ -57,7 +57,7 @@ class _DesktopHomeCalendarState extends State<DesktopHomeCalendar> {
       child: Scaffold(
         body: Row(
           children: [
-            const DesktopVNavbar(currentIndex: NavbarConstants.calenderIndex),
+            const DesktopVNavbar(),
             Column(
               children: [
                 const DesktopHNavbar(),

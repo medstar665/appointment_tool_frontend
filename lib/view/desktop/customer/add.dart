@@ -4,7 +4,7 @@ import 'package:medstar_appointment/services/customer_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
-import 'package:medstar_appointment/view/desktop/customer/home.dart';
+import 'package:medstar_appointment/view/desktop/customer/base_card.dart';
 import 'package:provider/provider.dart';
 
 class DesktopAddCustomer extends StatefulWidget {

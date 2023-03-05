@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:medstar_appointment/model/service.dart';
@@ -8,7 +6,7 @@ import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
 import 'package:medstar_appointment/view/desktop/components/number_text_field.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
-import 'package:medstar_appointment/view/desktop/services/home.dart';
+import 'package:medstar_appointment/view/desktop/services/base_card.dart';
 import 'package:provider/provider.dart';
 
 class DesktopEditService extends StatefulWidget {
@@ -76,7 +74,7 @@ class _DesktopEditServiceState extends State<DesktopEditService> {
                                     widget.goToPage(
                                         DesktopServicePageConstants.viewPage);
                                   },
-                            child: const Text('View Service'),
+                            child: const Text('Cancel'),
                           ),
                         );
                       }),

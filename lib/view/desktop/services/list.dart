@@ -5,7 +5,7 @@ import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
 import 'package:medstar_appointment/view/desktop/components/searchbar.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
-import 'package:medstar_appointment/view/desktop/services/home.dart';
+import 'package:medstar_appointment/view/desktop/services/base_card.dart';
 import 'package:provider/provider.dart';
 
 class DesktopListServices extends StatefulWidget {

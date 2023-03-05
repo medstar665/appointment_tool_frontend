@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:medstar_appointment/view/desktop/appointment/home.dart';
-import 'package:medstar_appointment/view/desktop/calender/home.dart';
-import 'package:medstar_appointment/view/desktop/customer/home.dart';
-import 'package:medstar_appointment/view/desktop/services/home.dart';
+import 'package:medstar_appointment/services/desktop_home_view_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
+import 'package:provider/provider.dart';
 
 class NavbarConstants {
   static const int calenderIndex = 0;
@@ -16,8 +14,7 @@ class NavbarConstants {
 }
 
 class DesktopVNavbar extends StatefulWidget {
-  const DesktopVNavbar({super.key, required this.currentIndex});
-  final int currentIndex;
+  const DesktopVNavbar({super.key});
 
   @override
   State<DesktopVNavbar> createState() => _DesktopVNavbarState();
@@ -40,68 +37,55 @@ class _DesktopVNavbarState extends State<DesktopVNavbar> {
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 100,
-            // color: Constants.primaryColor,
-            child: Image.asset('assets/images/brand_logo.jpg'),
-          ),
-          const SizedBox(height: 20),
-          GestureDetector(
-            onTap: true
-                ? null
-                : () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DesktopHomeCalendar(),
-                    )),
-            child: NavItem(
-              title: 'Calender',
-              icon: Icons.calendar_month_outlined,
-              onPage: widget.currentIndex == NavbarConstants.calenderIndex,
+      child: Consumer<DesktopHomeScreenService>(builder: (_, provider, __) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 20),
+            SizedBox(
+              height: 100,
+              // color: Constants.primaryColor,
+              child: Image.asset('assets/images/brand_logo.jpg'),
             ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DesktopHomeAppointment(),
-                )),
-            child: NavItem(
-              title: 'Appointments',
-              icon: Icons.timer_outlined,
-              onPage: widget.currentIndex == NavbarConstants.appointmentIndex,
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: true
+                  ? () {}
+                  : () => provider.moveTo(NavbarConstants.calenderIndex),
+              child: NavItem(
+                title: 'Calender',
+                icon: Icons.calendar_month_outlined,
+                onPage: provider.currentIndex == NavbarConstants.calenderIndex,
+              ),
             ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DesktopHomeCustomer(),
-                )),
-            child: NavItem(
-              title: 'Customers',
-              icon: Icons.people,
-              onPage: widget.currentIndex == NavbarConstants.customerIndex,
+            GestureDetector(
+              onTap: () => provider.moveTo(NavbarConstants.appointmentIndex),
+              child: NavItem(
+                title: 'Appointments',
+                icon: Icons.timer_outlined,
+                onPage:
+                    provider.currentIndex == NavbarConstants.appointmentIndex,
+              ),
             ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DesktopHomeService(),
-                )),
-            child: NavItem(
-              title: 'Services',
-              icon: Icons.miscellaneous_services,
-              onPage: widget.currentIndex == NavbarConstants.serviceIndex,
+            GestureDetector(
+              onTap: () => provider.moveTo(NavbarConstants.customerIndex),
+              child: NavItem(
+                title: 'Customers',
+                icon: Icons.people,
+                onPage: provider.currentIndex == NavbarConstants.customerIndex,
+              ),
             ),
-          ),
-        ],
-      ),
+            GestureDetector(
+              onTap: () => provider.moveTo(NavbarConstants.serviceIndex),
+              child: NavItem(
+                title: 'Services',
+                icon: Icons.miscellaneous_services,
+                onPage: provider.currentIndex == NavbarConstants.serviceIndex,
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

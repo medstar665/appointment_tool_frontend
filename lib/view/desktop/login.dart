@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
-import 'package:medstar_appointment/view/desktop/appointment/home.dart';
+import 'package:medstar_appointment/view/desktop/desktop_home.dart';
 import 'package:provider/provider.dart';
 
 class DesktopLogin extends StatefulWidget {
@@ -73,47 +73,42 @@ class _DesktopLoginState extends State<DesktopLogin> {
               SizedBox(
                 height: 35,
                 width: 100,
-                child: ElevatedButton(
-                  onPressed: loggingIn
-                      ? () {}
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              loggingIn = true;
-                            });
-                            _formKey.currentState!.save();
-                            String? resp = await (await UserManagement.create())
-                                .login(_email!, _password!);
-                            if (resp != null) {
+                child: Consumer<UserManagement>(builder: (_, provider, __) {
+                  return ElevatedButton(
+                    onPressed: loggingIn
+                        ? () {}
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
                               setState(() {
-                                loggingIn = false;
+                                loggingIn = true;
                               });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(resp)),
-                              );
-                              _formKey.currentState!.reset();
-                            } else {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DesktopHomeAppointment(),
-                                ),
-                              );
+                              _formKey.currentState!.save();
+                              String? resp =
+                                  await provider.login(_email!, _password!);
+                              if (resp != null) {
+                                setState(() {
+                                  loggingIn = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(resp)),
+                                );
+                                _formKey.currentState!.reset();
+                              }
                             }
-                          }
-                        },
-                  child: loggingIn
-                      ? const SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(color: Colors.white),
-                        )
-                      : const Text(
-                          'Login',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                ),
+                          },
+                    child: loggingIn
+                        ? const SizedBox(
+                            height: 30,
+                            width: 30,
+                            child:
+                                CircularProgressIndicator(color: Colors.white),
+                          )
+                        : const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                  );
+                }),
               ),
             ],
           ),
