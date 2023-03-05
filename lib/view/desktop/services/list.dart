@@ -75,7 +75,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Title',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -83,7 +83,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Duration',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -91,7 +91,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Fee',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -99,7 +99,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth + 100,
             child: const Text(
               'Description',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -107,7 +107,7 @@ class _ServiceTableHeading extends StatelessWidget {
             width: boxWidth - 100,
             child: const Text(
               'Color',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
         ],
@@ -192,7 +192,6 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                         width: boxWidth,
                         child: Text(
                           '${widget.service.title}',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -202,7 +201,6 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                           widget.service.duration != null
                               ? '${widget.service.duration} minutes'
                               : '',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -212,7 +210,6 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                           widget.service.fee != null
                               ? '\$ ${widget.service.fee}'
                               : '',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -220,7 +217,6 @@ class _ServiceListItemState extends State<_ServiceListItem> {
                         width: boxWidth + 100,
                         child: Text(
                           '${widget.service.description}',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(

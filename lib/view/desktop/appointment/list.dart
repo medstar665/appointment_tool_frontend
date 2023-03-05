@@ -269,7 +269,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: 50,
             child: const Text(
               '#',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -277,7 +277,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Customer',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -285,7 +285,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Service',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -293,7 +293,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Date',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -301,7 +301,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Time',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -309,7 +309,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Status',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -317,7 +317,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Duration',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -325,7 +325,7 @@ class _AppointmentTableHeading extends StatelessWidget {
             width: 100,
             child: const Text(
               'Color',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
         ],
@@ -411,7 +411,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                           width: 50,
                           child: Text(
                             '${widget.appointment.id}',
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(
@@ -419,7 +418,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                           width: boxWidth,
                           child: Text(
                             '${widget.appointment.customer!.firstName} ${widget.appointment.customer!.lastName}',
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(
@@ -427,7 +425,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                           width: boxWidth,
                           child: Text(
                             '${widget.appointment.service!.title}',
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(
@@ -437,7 +434,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                             widget.appointment.appointmentDateTime!
                                 .toString()
                                 .split(' ')[0],
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(
@@ -448,7 +444,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                                 .toString()
                                 .split(' ')[1]
                                 .substring(0, 5),
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(
@@ -475,7 +470,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                               const SizedBox(width: 3),
                               Text(
                                 '${widget.appointment.status}',
-                                style: const TextStyle(fontSize: 17),
                               ),
                             ],
                           ),
@@ -487,7 +481,6 @@ class _AppointmentListItemState extends State<_AppointmentListItem> {
                             widget.appointment.duration == null
                                 ? ''
                                 : '${widget.appointment.duration} mins',
-                            style: const TextStyle(fontSize: 17),
                           ),
                         ),
                         Container(

@@ -1,7 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:medstar_appointment/model/customer.dart';
-import 'package:medstar_appointment/model/service.dart';
 import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/appointment/home.dart';

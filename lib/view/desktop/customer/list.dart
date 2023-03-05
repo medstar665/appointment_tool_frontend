@@ -75,7 +75,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Full Name',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -83,7 +83,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Phone',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -91,7 +91,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Email',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -99,7 +99,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Age',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
           Container(
@@ -107,7 +107,7 @@ class _CustomerTableHeading extends StatelessWidget {
             width: boxWidth,
             child: const Text(
               'Note',
-              style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 17, fontStyle: FontStyle.italic),
             ),
           ),
         ],
@@ -199,7 +199,6 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         width: boxWidth,
                         child: Text(
                           '${widget.customer.firstName} ${widget.customer.lastName}',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -207,7 +206,6 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         width: boxWidth,
                         child: Text(
                           '${widget.customer.phone}',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -215,7 +213,6 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         width: boxWidth,
                         child: Text(
                           '${widget.customer.email}',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -223,7 +220,6 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         width: boxWidth,
                         child: Text(
                           '$years Years',
-                          style: const TextStyle(fontSize: 17),
                         ),
                       ),
                       Container(
@@ -231,7 +227,6 @@ class _CustomerListItemState extends State<_CustomerListItem> {
                         width: boxWidth,
                         child: Text(
                           '${widget.customer.note}',
-                          style: const TextStyle(fontSize: 17),
                           overflow: TextOverflow.clip,
                         ),
                       ),
