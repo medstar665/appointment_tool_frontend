@@ -44,9 +44,10 @@ class _DesktopVNavbarState extends State<DesktopVNavbar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 20),
-          Container(
+          SizedBox(
             height: 100,
-            color: Constants.primaryColor,
+            // color: Constants.primaryColor,
+            child: Image.asset('assets/images/brand_logo.jpg'),
           ),
           const SizedBox(height: 20),
           GestureDetector(
