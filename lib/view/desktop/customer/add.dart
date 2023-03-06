@@ -57,7 +57,7 @@ class _DesktopAddCustomerState extends State<DesktopAddCustomer> {
                                 widget.goToPage(
                                     DesktopCustomerPageConstants.listPage);
                               },
-                        child: const Text('All Customers'),
+                        child: const Text('Cancel'),
                       );
                     }),
                   ),

@@ -135,7 +135,7 @@ class _DesktopAddAppointmentState extends State<DesktopAddAppointment> {
                                         DesktopAppointmentPageConstants
                                             .listPage);
                                   },
-                            child: const Text('All Appointments'),
+                            child: const Text('Cancel'),
                           );
                         }),
                       ),

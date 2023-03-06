@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  // static const String baseApiUrl = 'localhost:8094';
+  // static const String baseApiUrl = 'localhost:8080';
   static const String baseApiUrl = '3.84.238.63.nip.io';
 
   static const MaterialColor primaryColor = Colors.blue;
@@ -60,6 +60,8 @@ class Constants {
   static final Map<String, String> requestHeader = {
     "Content-Type": "application/json"
   };
+
+  static const int pageSize = 10;
 
   static Color getHexColor(String? color) {
     if (color == null || color.isEmpty) {

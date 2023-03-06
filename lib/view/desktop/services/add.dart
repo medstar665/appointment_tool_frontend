@@ -63,7 +63,7 @@ class _DesktopAddServiceState extends State<DesktopAddService> {
                                 widget.goToPage(
                                     DesktopServicePageConstants.listPage);
                               },
-                        child: const Text('All Services'),
+                        child: const Text('Cancel'),
                       );
                     }),
                   ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:medstar_appointment/model/appointment.dart';
+import 'package:medstar_appointment/model/paginate.dart';
 import 'package:medstar_appointment/services/base_service.dart';
 import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
@@ -20,6 +21,11 @@ class AppointmentService extends BaseService {
   bool _isAdding = false;
   bool _isUpdating = false;
   bool _updatingStatus = false;
+  int _currentPage = 1;
+  int? _totalElements;
+  String? _searchValue;
+  DateTime? _searchStartDate;
+  DateTime? _searchEndDate;
   AppointmentModel _viewAppointment =
       AppointmentModel(customerId: 0, serviceId: 0);
 
@@ -34,23 +40,38 @@ class AppointmentService extends BaseService {
   }
 
   @override
-  Future<void> getAll(
-      {String? search, DateTime? startDate, DateTime? endDate}) async {
+  Future<void> getAll({
+    int? pageNum,
+    String? search,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
     _isSearchingAll = true;
     notifyListeners();
+    _setSearchFilter(search, startDate, endDate);
     Uri uri = Uri.https(Constants.baseApiUrl, '/appointments', {
-      'search': search,
-      'startDate': startDate?.toIso8601String(),
-      'endDate': endDate?.toIso8601String(),
+      'pageNum': '${pageNum ?? 1}',
+      'pageSize': '${Constants.pageSize}',
+      'search': _searchValue,
+      'startDate': _searchStartDate?.toIso8601String(),
+      'endDate': _searchEndDate?.toIso8601String(),
     });
     http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
-      List respBody = jsonDecode(resp.body) as List;
-      _appointments =
-          respBody.map((e) => AppointmentModel.fromJson(e)).toList();
+      final appointmentPage = PaginatedResponse<AppointmentModel>.fromJson(
+          jsonDecode(resp.body), AppointmentModel.fromJson);
+      _appointments = appointmentPage.data ?? [];
+      _currentPage = appointmentPage.pageNum;
+      _totalElements = appointmentPage.totalElements!;
     }
     _isSearchingAll = false;
     notifyListeners();
+  }
+
+  void _setSearchFilter(String? text, DateTime? start, DateTime? end) {
+    _searchValue = text;
+    _searchStartDate = start;
+    _searchEndDate = end;
   }
 
   Future<void> downloadReport(
@@ -146,4 +167,54 @@ class AppointmentService extends BaseService {
   bool get isUpdating => _isUpdating;
   bool get updatingStatus => _updatingStatus;
   AppointmentModel get viewAppointment => _viewAppointment;
+
+  @override
+  int get currentPage => _currentPage;
+
+  @override
+  int? get totalPage => _totalElements == null
+      ? null
+      : _totalElements! ~/ Constants.pageSize < 1
+          ? 1
+          : _totalElements! ~/ Constants.pageSize;
+
+  @override
+  Future<void> onNextPage() async {
+    await getAll(
+      pageNum: _currentPage + 1,
+      search: _searchValue,
+      startDate: _searchStartDate,
+      endDate: _searchEndDate,
+    );
+  }
+
+  @override
+  Future<void> onPreviousPage() async {
+    await getAll(
+      pageNum: _currentPage - 1,
+      search: _searchValue,
+      startDate: _searchStartDate,
+      endDate: _searchEndDate,
+    );
+  }
+
+  @override
+  Future<void> onFirstPage() async {
+    await getAll(
+      pageNum: 1,
+      search: _searchValue,
+      startDate: _searchStartDate,
+      endDate: _searchEndDate,
+    );
+  }
+
+  @override
+  Future<void> onLastPage() async {
+    await getAll(
+      pageNum: totalPage,
+      search: _searchValue,
+      startDate: _searchStartDate,
+      endDate: _searchEndDate,
+    );
+  }
 }

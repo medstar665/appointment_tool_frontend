@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:medstar_appointment/model/customer.dart';
+import 'package:medstar_appointment/model/paginate.dart';
 import 'package:medstar_appointment/services/base_service.dart';
 import 'package:medstar_appointment/services/user_management.dart';
 import 'package:medstar_appointment/utility/constants.dart';
@@ -11,6 +12,9 @@ class CustomerService extends BaseService {
   bool _isSearchingAll = false;
   bool _isAdding = false;
   bool _isUpdating = false;
+  int _currentPage = 1;
+  int? _totalElements;
+  String? _searchValue;
   CustomerModel _viewCustomer = CustomerModel();
 
   @override
@@ -24,19 +28,30 @@ class CustomerService extends BaseService {
   }
 
   @override
-  Future<void> getAll({String? search}) async {
+  Future<void> getAll({int? pageNum, String? search}) async {
     _isSearchingAll = true;
     notifyListeners();
+    _searchValue = search;
     Uri uri;
-    if (search != null && search.isNotEmpty) {
-      uri = Uri.https(Constants.baseApiUrl, '/customers', {'search': search});
+    if (_searchValue != null && _searchValue!.isNotEmpty) {
+      uri = Uri.https(Constants.baseApiUrl, '/customers', {
+        'pageNum': '${pageNum ?? 1}',
+        'pageSize': '${Constants.pageSize}',
+        'search': _searchValue,
+      });
     } else {
-      uri = Uri.https(Constants.baseApiUrl, '/customers');
+      uri = Uri.https(Constants.baseApiUrl, '/customers', {
+        'pageNum': '${pageNum ?? 1}',
+        'pageSize': '${Constants.pageSize}',
+      });
     }
     http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
-      List respBody = jsonDecode(resp.body) as List;
-      _customers = respBody.map((e) => CustomerModel.fromJson(e)).toList();
+      final customerPage = PaginatedResponse<CustomerModel>.fromJson(
+          jsonDecode(resp.body), CustomerModel.fromJson);
+      _customers = customerPage.data ?? [];
+      _currentPage = customerPage.pageNum;
+      _totalElements = customerPage.totalElements!;
     }
     _isSearchingAll = false;
     notifyListeners();
@@ -106,4 +121,34 @@ class CustomerService extends BaseService {
   bool get isAdding => _isAdding;
   bool get isUpdating => _isUpdating;
   CustomerModel get viewCustomer => _viewCustomer;
+
+  @override
+  int get currentPage => _currentPage;
+
+  @override
+  int? get totalPage => _totalElements == null
+      ? null
+      : _totalElements! ~/ Constants.pageSize < 1
+          ? 1
+          : _totalElements! ~/ Constants.pageSize;
+
+  @override
+  Future<void> onNextPage() async {
+    await getAll(pageNum: _currentPage + 1, search: _searchValue);
+  }
+
+  @override
+  Future<void> onPreviousPage() async {
+    await getAll(pageNum: _currentPage - 1, search: _searchValue);
+  }
+
+  @override
+  Future<void> onFirstPage() async {
+    await getAll(pageNum: 1, search: _searchValue);
+  }
+
+  @override
+  Future<void> onLastPage() async {
+    await getAll(pageNum: totalPage, search: _searchValue);
+  }
 }

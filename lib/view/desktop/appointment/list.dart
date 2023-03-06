@@ -4,6 +4,7 @@ import 'package:medstar_appointment/services/appointment_service.dart';
 import 'package:medstar_appointment/utility/constants.dart';
 import 'package:medstar_appointment/view/desktop/appointment/base_card.dart';
 import 'package:medstar_appointment/view/desktop/components/divider.dart';
+import 'package:medstar_appointment/view/desktop/components/pagination_tab.dart';
 import 'package:medstar_appointment/view/desktop/components/vnavbar.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,8 @@ class _DesktopListApointmentState extends State<DesktopListApointment> {
               tableWidth: tableWidth,
               goToPage: widget.goToPage,
             ),
-          )
+          ),
+          const CustomPagination<AppointmentService>(),
         ],
       ),
     );
