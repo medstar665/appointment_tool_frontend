@@ -97,10 +97,9 @@ class CustomerService extends BaseService {
     }
     http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
-      List respBody = jsonDecode(resp.body) as List;
-      List<CustomerModel> customernames =
-          respBody.map((e) => CustomerModel.fromJson(e)).toList();
-      return customernames;
+      final customerPage = PaginatedResponse<CustomerModel>.fromJson(
+          jsonDecode(resp.body), CustomerModel.fromJson);
+      return customerPage.data ?? [];
     }
     return [];
   }
@@ -126,11 +125,7 @@ class CustomerService extends BaseService {
   int get currentPage => _currentPage;
 
   @override
-  int? get totalPage => _totalElements == null
-      ? null
-      : _totalElements! ~/ Constants.pageSize < 1
-          ? 1
-          : _totalElements! ~/ Constants.pageSize;
+  int get totalElements => _totalElements ?? 0;
 
   @override
   Future<void> onNextPage() async {

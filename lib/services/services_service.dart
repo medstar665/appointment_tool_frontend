@@ -58,19 +58,13 @@ class ServiceService extends BaseService {
     notifyListeners();
   }
 
-  Future<List<ServiceModel>> getAllServices({String? search}) async {
-    Uri uri;
-    if (search != null) {
-      uri = Uri.https(Constants.baseApiUrl, '/facilities', {'search': search});
-    } else {
-      uri = Uri.https(Constants.baseApiUrl, '/facilities');
-    }
+  Future<List<ServiceModel>> getAllServices() async {
+    Uri uri = Uri.https(Constants.baseApiUrl, '/facilities-without-page');
     http.Response resp = await http.get(uri, headers: _getHeader());
     if (resp.statusCode == 200) {
-      List respBody = jsonDecode(resp.body) as List;
-      final serviceTitles =
-          respBody.map((e) => ServiceModel.fromJson(e)).toList();
-      return serviceTitles;
+      final servicePage = PaginatedResponse<ServiceModel>.fromJson(
+          jsonDecode(resp.body), ServiceModel.fromJson);
+      return servicePage.data ?? [];
     }
     return [];
   }
@@ -125,11 +119,7 @@ class ServiceService extends BaseService {
   int get currentPage => _currentPage;
 
   @override
-  int? get totalPage => _totalElements == null
-      ? null
-      : _totalElements! ~/ Constants.pageSize < 1
-          ? 1
-          : _totalElements! ~/ Constants.pageSize;
+  int get totalElements => _totalElements ?? 0;
 
   @override
   Future<void> onNextPage() async {

@@ -172,11 +172,7 @@ class AppointmentService extends BaseService {
   int get currentPage => _currentPage;
 
   @override
-  int? get totalPage => _totalElements == null
-      ? null
-      : _totalElements! ~/ Constants.pageSize < 1
-          ? 1
-          : _totalElements! ~/ Constants.pageSize;
+  int get totalElements => _totalElements ?? 0;
 
   @override
   Future<void> onNextPage() async {
